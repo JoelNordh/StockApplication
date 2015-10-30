@@ -1,0 +1,2 @@
+# StockApplication
+Börs robot
