@@ -10,13 +10,17 @@ namespace DataConverter
 {
     public class DataClass
     {
+        public enum priceChooser { HIGHPRICE, LOWPRICE, CLOSINGPRICE, AVRAGEPRICE };
+
         public DateTime date;
+        public priceChooser priceChoice;
+        
         public double highPrice { get; set; }
         public double lowPrice { get; set; }
         public double closingPrice { get; set; }
         public double avragePrice { get; set; }
         public int volume { get; set; }
-        public int turnover { get; set; }
+        public double turnover { get; set; }
         public int trades { get; set; }
 
         public DataClass()
@@ -29,6 +33,7 @@ namespace DataConverter
             this.volume = 0;
             this.turnover = 0;
             this.trades = 0;
+            priceChoice = priceChooser.AVRAGEPRICE;
         }
 
         

@@ -23,32 +23,56 @@ namespace StockApplication
     /// </summary>
     public partial class MainWindow : Window
     {
-        private void plotData(List<DataClass> list)
+        List<DataClass> priceList;
+        private void plotData(List<PlotClass> list, Brush pen, String Description)
         {
             IPointDataSource point = null;
             LineGraph line;
+            
 
-            EnumerableDataSource<DataClass> _edsSPP;
-            _edsSPP = new EnumerableDataSource<DataClass>(list);
+            EnumerableDataSource<PlotClass> _edsSPP;
+            _edsSPP = new EnumerableDataSource<PlotClass>(list);
             _edsSPP.SetXMapping(p => dateAxis.ConvertToDouble(p.date));
-            _edsSPP.SetYMapping(p => p.highPrice);
+            _edsSPP.SetYMapping(p => p.value);
             point = _edsSPP;
 
             line = new LineGraph(point);
-            line.LinePen = new Pen(Brushes.Black, 2);
-            line.Description = new PenDescription("Price");
+            line.LinePen = new Pen(pen, 2);
+            line.Description = new PenDescription(Description);
             plotter.Children.Add(line);
             plotter.FitToView();
+        }
+
+        private List<PlotClass> CalculateMovingAvrage(int avrage)
+        {
+            List<PlotClass> plotData = new List<PlotClass>();
+            double lastAvrage = 0;
+            for (int i = avrage; i < priceList.Count; i++)
+            {
+                lastAvrage = 0;
+                for (int y = i - avrage; y < i; y++)
+                {
+                    lastAvrage += priceList[y].closingPrice;
+                }
+                lastAvrage = lastAvrage / avrage;
+
+                plotData.Add(new PlotClass(lastAvrage, priceList[i].date));
+            }
+            return plotData;
         }
 
         public MainWindow()
         {
             InitializeComponent();
-            List<DataClass> list = DataConverter.DataConverter.ParseCSV(new System.IO.StreamReader("history.csv"));
-
+            priceList = DataConverter.DataConverter.ParseCSV(new System.IO.StreamReader("history.csv"));
+            priceList.Reverse();
             //LineChart1.DataContext = list;
 
-            plotData(list);
+            plotData(DataConverter.DataConverter.toPlotClass(priceList, DataClass.priceChooser.CLOSINGPRICE), Brushes.Black, "Current Price");
+            plotData(CalculateMovingAvrage(20), Brushes.BlueViolet, "MA 20");
+            plotData(CalculateMovingAvrage(50), Brushes.Red, "MA 50");
+            plotData(CalculateMovingAvrage(100), Brushes.Green, "MA 100");
+
 
             string test = "";
         }

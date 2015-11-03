@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="DataClass.cs" />
     <Compile Include="DataConverter.cs" />
+    <Compile Include="PlotClass.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -12,12 +12,12 @@ namespace DataConverter
     {
         public DataConverter()
         {
-
         }
 
         public static List<DataClass> ParseCSV(StreamReader stream)
         {
             List<DataClass> list = new List<DataClass>();
+            System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
             using (TextFieldParser parser = new TextFieldParser(stream))
             {
                 parser.CommentTokens = new string[] { "#" };
@@ -38,7 +38,7 @@ namespace DataConverter
                     data.closingPrice = parseDouble(fields[3]);
                     data.avragePrice = parseDouble(fields[4]);
                     data.volume = parseInt(fields[5]);
-                    data.turnover = parseInt(fields[6]);
+                    data.turnover = parseDouble(fields[6]);
                     data.trades = parseInt(fields[7]);
 
                     list.Add(data);
@@ -49,6 +49,10 @@ namespace DataConverter
 
         private static double parseDouble(string sValue)
         {
+            if(sValue == "")
+            {
+                return -1;
+            }
             try
             {
                 return double.Parse(sValue);
@@ -68,6 +72,35 @@ namespace DataConverter
             {
                 return -1;
             }
+        }
+
+        public static List<PlotClass> toPlotClass(List<DataClass> data, DataClass.priceChooser choice)
+        {
+            List<PlotClass> toPlot = new List<PlotClass>();
+            foreach (DataClass Item in data)
+            {
+                PlotClass plotClass;
+                switch (choice)
+                {
+                    case DataClass.priceChooser.AVRAGEPRICE:
+                        plotClass = new PlotClass(Item.avragePrice, Item.date);
+                        break;
+                    case DataClass.priceChooser.HIGHPRICE:
+                        plotClass = new PlotClass(Item.highPrice, Item.date);
+                        break;
+                    case DataClass.priceChooser.LOWPRICE:
+                        plotClass = new PlotClass(Item.lowPrice, Item.date);
+                        break;
+                    case DataClass.priceChooser.CLOSINGPRICE:
+                        plotClass = new PlotClass(Item.closingPrice, Item.date);
+                        break;
+                    default:
+                        plotClass = new PlotClass();
+                        break;
+                }
+                toPlot.Add(plotClass);
+            }
+            return toPlot;
         }
     }
 }
