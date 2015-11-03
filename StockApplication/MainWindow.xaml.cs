@@ -13,6 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DataConverter;
+using Microsoft.Research.DynamicDataDisplay.DataSources;
+using Microsoft.Research.DynamicDataDisplay;
 
 namespace StockApplication
 {
@@ -21,12 +23,32 @@ namespace StockApplication
     /// </summary>
     public partial class MainWindow : Window
     {
+        private void plotData(List<DataClass> list)
+        {
+            IPointDataSource point = null;
+            LineGraph line;
+
+            EnumerableDataSource<DataClass> _edsSPP;
+            _edsSPP = new EnumerableDataSource<DataClass>(list);
+            _edsSPP.SetXMapping(p => dateAxis.ConvertToDouble(p.date));
+            _edsSPP.SetYMapping(p => p.highPrice);
+            point = _edsSPP;
+
+            line = new LineGraph(point);
+            line.LinePen = new Pen(Brushes.Black, 2);
+            line.Description = new PenDescription("Price");
+            plotter.Children.Add(line);
+            plotter.FitToView();
+        }
+
         public MainWindow()
         {
             InitializeComponent();
             List<DataClass> list = DataConverter.DataConverter.ParseCSV(new System.IO.StreamReader("history.csv"));
 
-            LineChart1.DataContext = list;
+            //LineChart1.DataContext = list;
+
+            plotData(list);
 
             string test = "";
         }
