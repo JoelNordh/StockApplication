@@ -1,0 +1,21 @@
+﻿<Window x:Class="StockApplication.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:StockApplication"
+        xmlns:toolkit="http://schemas.microsoft.com/wpf/2008/toolkit"
+        xmlns:charting="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="500"/>
+            <RowDefinition Height="150"/>
+        </Grid.RowDefinitions>
+        <charting:Chart Grid.Row="1" Name="LineChart1" Title="TestData">
+            <charting:LineSeries DependentValuePath="closingPrice" IndependentValuePath="date" ItemsSource="{Binding list}"/>
+        </charting:Chart>
+    </Grid>
+</Window>
