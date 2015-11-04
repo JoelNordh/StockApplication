@@ -22,8 +22,12 @@ namespace StockApplication
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
+    {     
         List<DataClass> priceList;
+        List<PlotClass> movingAvrage20;
+        List<PlotClass> UpperBolinger = new List<PlotClass>();
+        List<PlotClass> LowerBolinger = new List<PlotClass>();
+
         private void plotData(List<PlotClass> list, Brush pen, String Description)
         {
             IPointDataSource point = null;
@@ -61,20 +65,48 @@ namespace StockApplication
             return plotData;
         }
 
+        private void CalculateBolinger()
+        {
+            for(int i =0; i<movingAvrage20.Count; i++)
+            {
+                double deviationSquare = 0;
+                for(int y = 20+i; y > i; y--)
+                {
+                    deviationSquare += Math.Pow(movingAvrage20[i].value - priceList[y].closingPrice, 2);
+                }
+                deviationSquare = Math.Sqrt(deviationSquare / 20);
+
+                UpperBolinger.Add(new PlotClass(movingAvrage20[i].value + (deviationSquare*2), movingAvrage20[i].date));
+                LowerBolinger.Add(new PlotClass(movingAvrage20[i].value - (deviationSquare*2), movingAvrage20[i].date));
+            }
+
+            plotData(UpperBolinger, Brushes.Pink, "Upper bolinger");
+            plotData(LowerBolinger, Brushes.Pink, "Lower bolinger");
+        }
+
+
+
         public MainWindow()
         {
             InitializeComponent();
-            priceList = DataConverter.DataConverter.ParseCSV(new System.IO.StreamReader("history.csv"));
-            priceList.Reverse();
-            //LineChart1.DataContext = list;
+
+            movingAvrage20 = CalculateMovingAvrage(20);
 
             plotData(DataConverter.DataConverter.toPlotClass(priceList, DataClass.priceChooser.CLOSINGPRICE), Brushes.Black, "Current Price");
-            plotData(CalculateMovingAvrage(20), Brushes.BlueViolet, "MA 20");
+            plotData(movingAvrage20, Brushes.BlueViolet, "MA 20");
             plotData(CalculateMovingAvrage(50), Brushes.Red, "MA 50");
             plotData(CalculateMovingAvrage(100), Brushes.Green, "MA 100");
 
+            CalculateBolinger();
 
-            string test = "";
+        }
+
+        private void Grid_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Space)
+            {
+                //Fire new event with new data
+            }
         }
     }
 }
