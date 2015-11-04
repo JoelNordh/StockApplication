@@ -30,7 +30,8 @@ namespace StockHandler
         CsvStockParser parser = new CsvStockParser();
 
         public ObservableCollection<DataClass> priceList;
-        public ObservableCollection<StockClass> movingAvrage20;
+        public ObservableCollection<StockClass> priceList2;
+        public ObservableCollection<StockClass> movingAvrage20 = new ObservableCollection<StockClass>();
         public ObservableCollection<StockClass> movingAvrage50;
         public ObservableCollection<StockClass> movingAvrage100;
         public ObservableCollection<StockClass> UpperBolinger = new ObservableCollection<StockClass>();
@@ -39,17 +40,28 @@ namespace StockHandler
         public StockHandler()
         {
             priceList = new ObservableCollection<DataClass>();
+            priceList2 = new ObservableCollection<StockClass>();
 
-            movingAvrage20 = CalculateMovingAvrage(20);
-            movingAvrage50 = CalculateMovingAvrage(50);
-            movingAvrage100 = CalculateMovingAvrage(100);
+            //movingAvrage20 = CalculateMovingAvrage(20);
+            //movingAvrage50 = CalculateMovingAvrage(50);
+            //movingAvrage100 = CalculateMovingAvrage(100);
 
-            CalculateBolinger();
+            //CalculateBolinger();
         }
 
-        public void addTestData(DataClass data)
+        public void addTestData(DataClass data) 
         {
-            priceList.Add(data);
+            priceList.Add(data); 
+            priceList2.Add(new StockClass(data.closingPrice, data.date));
+
+            movingAvrage20 = CalculateMovingAvrage(20);
+            //movingAvrage50 = CalculateMovingAvrage(50);
+            //movingAvrage100 = CalculateMovingAvrage(100);
+
+            //if(movingAvrage20 != null)
+            //{
+            //    CalculateBolinger();
+            //}
         }
 
 
@@ -57,6 +69,12 @@ namespace StockHandler
         {
             ObservableCollection<StockClass> stockData = new ObservableCollection<StockClass>();
             double lastAvrage = 0;
+
+            if(priceList.Count < avrage)
+            {
+                return null;
+            }
+
             for (int i = avrage; i < priceList.Count; i++)
             {
                 lastAvrage = 0;

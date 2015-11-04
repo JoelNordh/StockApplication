@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DataConverter;
 
-namespace StockApplication
+namespace StockHandler
 {
-    class StockTrader
+    public class StockTrader
     {
         List<DataConverter.DataClass> possesion;
         double balance;
@@ -22,14 +23,16 @@ namespace StockApplication
             balance += amount;
         }
 
-        public void buyStock(int amount)
+        public void buyStock(int amount, DataClass buyDetails)
         {
+            DataClass purchase = buyDetails;
 
+            possesion.Add(buyDetails);
         }
 
-        public void sellStock(int amount)
+        public void sellStock(int amount, DataClass sellDetails)
         {
-
+            possesion.Remove(sellDetails);
         }
     }
 }

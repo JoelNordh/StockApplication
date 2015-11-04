@@ -28,7 +28,7 @@ namespace StockApplication
         StockHandler.TestClass testClass = new TestClass(new CsvStockParser());
         StockHandler.StockHandler stockClass = new StockHandler.StockHandler();
 
-        private void plotData(ObservableCollection<StockClass> list, Brush pen, String Description)
+        private void plotData(ref ObservableCollection<StockClass> list, Brush pen, String Description)
         {
             IPointDataSource point = null;
             LineGraph line;
@@ -54,8 +54,8 @@ namespace StockApplication
 
             testClass.StockDataAdded += GotNewStockData;
 
-            plotData(toStockClass(stockClass.priceList, DataClass.priceChooser.CLOSINGPRICE), Brushes.Black, "Current Price");
-            //plotData(stockClass.movingAvrage20, Brushes.BlueViolet, "MA 20");
+            plotData(ref stockClass.priceList2, Brushes.Black, "Current Price");
+            
             //plotData(stockClass.movingAvrage50, Brushes.Red, "MA 50");
             //plotData(stockClass.movingAvrage100, Brushes.Green, "MA 100");
             //plotData(stockClass.UpperBolinger, Brushes.Pink, "Upper Boliger");
@@ -75,6 +75,8 @@ namespace StockApplication
         {
             stockClass.addTestData(args.Data);
             Console.WriteLine(args.Data.closingPrice.ToString());
+            if (stockClass.priceList.Count == 20)
+                     plotData(ref stockClass.movingAvrage20, Brushes.BlueViolet, "MA 20");
         }
 
 
