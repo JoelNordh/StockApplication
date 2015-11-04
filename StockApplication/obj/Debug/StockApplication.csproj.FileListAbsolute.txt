@@ -55,25 +55,9 @@ C:\Users\jn2957\Documents\Visual Studio 2015\Projects\StockApplication\StockAppl
 C:\Users\jn2957\Documents\Visual Studio 2015\Projects\StockApplication\StockApplication\obj\Debug\StockApplication.g.resources
 C:\Users\jn2957\Documents\Visual Studio 2015\Projects\StockApplication\StockApplication\obj\Debug\StockApplication.Properties.Resources.resources
 C:\Users\jn2957\Documents\Visual Studio 2015\Projects\StockApplication\StockApplication\obj\Debug\StockApplication.csproj.GenerateResource.Cache
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\StockApplication.exe.config
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\StockApplication.exe
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\StockApplication.pdb
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\StockApplication.csprojResolveAssemblyReference.cache
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\App.g.cs
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\StockApplication_MarkupCompile.cache
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\MainWindow.g.cs
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\StockApplication_MarkupCompile.lref
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\StockApplication.exe
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\StockApplication.pdb
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\DataConverter.dll
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\DynamicDataDisplay.dll
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\System.Windows.Controls.Input.Toolkit.dll
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\System.Windows.Controls.Layout.Toolkit.dll
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\WPFToolkit.dll
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\DataConverter.pdb
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\System.Windows.Controls.DataVisualization.Toolkit.pdb
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\MainWindow.baml
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\StockApplication.g.resources
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\StockApplication.Properties.Resources.resources
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\StockApplication.csproj.GenerateResource.Cache
+C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\App.g.cs
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\StockApplication_MarkupCompile.cache
+C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\StockApplication_MarkupCompile.lref

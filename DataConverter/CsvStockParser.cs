@@ -8,13 +8,9 @@ using System.Threading.Tasks;
 
 namespace DataConverter
 {
-    public class DataConverter
+    public sealed class CsvStockParser : StockParser
     {
-        public DataConverter()
-        {
-        }
-
-        public static List<DataClass> ParseCSV(StreamReader stream)
+        public List<DataClass> Parse(StreamReader stream)
         {
             List<DataClass> list = new List<DataClass>();
             System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
@@ -49,7 +45,7 @@ namespace DataConverter
 
         private static double parseDouble(string sValue)
         {
-            if(sValue == "")
+            if (sValue == "")
             {
                 return -1;
             }
@@ -72,35 +68,6 @@ namespace DataConverter
             {
                 return -1;
             }
-        }
-
-        public static List<PlotClass> toPlotClass(List<DataClass> data, DataClass.priceChooser choice)
-        {
-            List<PlotClass> toPlot = new List<PlotClass>();
-            foreach (DataClass Item in data)
-            {
-                PlotClass plotClass;
-                switch (choice)
-                {
-                    case DataClass.priceChooser.AVRAGEPRICE:
-                        plotClass = new PlotClass(Item.avragePrice, Item.date);
-                        break;
-                    case DataClass.priceChooser.HIGHPRICE:
-                        plotClass = new PlotClass(Item.highPrice, Item.date);
-                        break;
-                    case DataClass.priceChooser.LOWPRICE:
-                        plotClass = new PlotClass(Item.lowPrice, Item.date);
-                        break;
-                    case DataClass.priceChooser.CLOSINGPRICE:
-                        plotClass = new PlotClass(Item.closingPrice, Item.date);
-                        break;
-                    default:
-                        plotClass = new PlotClass();
-                        break;
-                }
-                toPlot.Add(plotClass);
-            }
-            return toPlot;
         }
     }
 }

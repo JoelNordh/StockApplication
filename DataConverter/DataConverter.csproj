@@ -53,9 +53,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CsvStockParser.cs" />
     <Compile Include="DataClass.cs" />
-    <Compile Include="DataConverter.cs" />
-    <Compile Include="PlotClass.cs" />
+    <Compile Include="StockParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

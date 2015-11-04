@@ -68,8 +68,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="PlotClass.cs" />
     <Compile Include="StockTrader.cs" />
-    <Compile Include="TestClass.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -116,6 +116,10 @@
     <ProjectReference Include="..\DataConverter\DataConverter.csproj">
       <Project>{12a7541f-491d-496f-a44c-3ae12b5ee880}</Project>
       <Name>DataConverter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\StockHandler\StockHandler.csproj">
+      <Project>{67c94d3b-2c98-4795-a31d-89379e1d84a5}</Project>
+      <Name>StockHandler</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

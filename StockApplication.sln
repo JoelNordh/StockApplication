@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
+# Visual Studio Express 14 for Windows Desktop
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockApplication", "StockApplication\StockApplication.csproj", "{43922AEB-A419-4476-8222-8EC2BA491642}"
@@ -8,6 +8,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataConverter", "DataConverter\DataConverter.csproj", "{12A7541F-491D-496F-A44C-3AE12B5EE880}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject1\TestProject1.csproj", "{607FABFC-7C24-49E2-922A-80A1FC401F90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockHandler", "StockHandler\StockHandler.csproj", "{67C94D3B-2C98-4795-A31D-89379E1D84A5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{607FABFC-7C24-49E2-922A-80A1FC401F90}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{607FABFC-7C24-49E2-922A-80A1FC401F90}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{607FABFC-7C24-49E2-922A-80A1FC401F90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67C94D3B-2C98-4795-A31D-89379E1D84A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67C94D3B-2C98-4795-A31D-89379E1D84A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67C94D3B-2C98-4795-A31D-89379E1D84A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67C94D3B-2C98-4795-A31D-89379E1D84A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

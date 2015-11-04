@@ -12,9 +12,11 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using DataConverter;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using Microsoft.Research.DynamicDataDisplay;
+using System.Collections.ObjectModel;
+using StockHandler;
+using DataConverter;
 
 namespace StockApplication
 {
@@ -23,12 +25,10 @@ namespace StockApplication
     /// </summary>
     public partial class MainWindow : Window
     {     
-        List<DataClass> priceList;
-        List<PlotClass> movingAvrage20;
-        List<PlotClass> UpperBolinger = new List<PlotClass>();
-        List<PlotClass> LowerBolinger = new List<PlotClass>();
+        StockHandler.TestClass testClass = new TestClass(new CsvStockParser());
+        StockHandler.StockHandler stockClass = new StockHandler.StockHandler();
 
-        private void plotData(List<PlotClass> list, Brush pen, String Description)
+        private void plotData(ObservableCollection<PlotClass> list, Brush pen, String Description)
         {
             IPointDataSource point = null;
             LineGraph line;
@@ -47,57 +47,18 @@ namespace StockApplication
             plotter.FitToView();
         }
 
-        private List<PlotClass> CalculateMovingAvrage(int avrage)
-        {
-            List<PlotClass> plotData = new List<PlotClass>();
-            double lastAvrage = 0;
-            for (int i = avrage; i < priceList.Count; i++)
-            {
-                lastAvrage = 0;
-                for (int y = i - avrage; y < i; y++)
-                {
-                    lastAvrage += priceList[y].closingPrice;
-                }
-                lastAvrage = lastAvrage / avrage;
-
-                plotData.Add(new PlotClass(lastAvrage, priceList[i].date));
-            }
-            return plotData;
-        }
-
-        private void CalculateBolinger()
-        {
-            for(int i =0; i<movingAvrage20.Count; i++)
-            {
-                double deviationSquare = 0;
-                for(int y = 20+i; y > i; y--)
-                {
-                    deviationSquare += Math.Pow(movingAvrage20[i].value - priceList[y].closingPrice, 2);
-                }
-                deviationSquare = Math.Sqrt(deviationSquare / 20);
-
-                UpperBolinger.Add(new PlotClass(movingAvrage20[i].value + (deviationSquare*2), movingAvrage20[i].date));
-                LowerBolinger.Add(new PlotClass(movingAvrage20[i].value - (deviationSquare*2), movingAvrage20[i].date));
-            }
-
-            plotData(UpperBolinger, Brushes.Pink, "Upper bolinger");
-            plotData(LowerBolinger, Brushes.Pink, "Lower bolinger");
-        }
-
-
-
         public MainWindow()
         {
             InitializeComponent();
 
-            movingAvrage20 = CalculateMovingAvrage(20);
+            //movingAvrage20 = ;
 
-            plotData(DataConverter.DataConverter.toPlotClass(priceList, DataClass.priceChooser.CLOSINGPRICE), Brushes.Black, "Current Price");
-            plotData(movingAvrage20, Brushes.BlueViolet, "MA 20");
-            plotData(CalculateMovingAvrage(50), Brushes.Red, "MA 50");
-            plotData(CalculateMovingAvrage(100), Brushes.Green, "MA 100");
+            plotData(toPlotClass(stockClass.getPriceList(), DataClass.priceChooser.CLOSINGPRICE), Brushes.Black, "Current Price");
+            //plotData(movingAvrage20, Brushes.BlueViolet, "MA 20");
+            //plotData(CalculateMovingAvrage(50), Brushes.Red, "MA 50");
+            //plotData(CalculateMovingAvrage(100), Brushes.Green, "MA 100");
 
-            CalculateBolinger();
+            //CalculateBolinger();
 
         }
 
@@ -106,7 +67,38 @@ namespace StockApplication
             if (e.Key == Key.Space)
             {
                 //Fire new event with new data
+                testClass.nextData();
             }
+        }
+
+        public static ObservableCollection<PlotClass> toPlotClass(ObservableCollection<DataClass> data, DataClass.priceChooser choice)
+        {
+            //List<PlotClass> toPlot = new List<PlotClass>();
+            ObservableCollection<PlotClass> toPlot = new ObservableCollection<PlotClass>();
+            foreach (DataClass Item in data)
+            {
+                PlotClass plotClass;
+                switch (choice)
+                {
+                    case DataClass.priceChooser.AVRAGEPRICE:
+                        plotClass = new PlotClass(Item.avragePrice, Item.date);
+                        break;
+                    case DataClass.priceChooser.HIGHPRICE:
+                        plotClass = new PlotClass(Item.highPrice, Item.date);
+                        break;
+                    case DataClass.priceChooser.LOWPRICE:
+                        plotClass = new PlotClass(Item.lowPrice, Item.date);
+                        break;
+                    case DataClass.priceChooser.CLOSINGPRICE:
+                        plotClass = new PlotClass(Item.closingPrice, Item.date);
+                        break;
+                    default:
+                        plotClass = new PlotClass();
+                        break;
+                }
+                toPlot.Add(plotClass);
+            }
+            return toPlot;
         }
     }
 }
