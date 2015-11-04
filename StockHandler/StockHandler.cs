@@ -28,6 +28,7 @@ namespace StockHandler
     public class StockHandler
     {
         TestClass testClass = new TestClass(new CsvStockParser());
+        CsvStockParser parser = new CsvStockParser();
 
         ObservableCollection<DataClass> priceList;
         ObservableCollection<StockClass> movingAvrage20;
@@ -37,6 +38,7 @@ namespace StockHandler
         public StockHandler()
         {
             testClass.StockDataAdded += GotNewStockData;
+            priceList = parser.Parse(new System.IO.StreamReader("history.csv"));
         }
 
         private void GotNewStockData(object sender, NewDataEventArgs args)
@@ -83,5 +85,10 @@ namespace StockHandler
         {
             return priceList;
         }
+
+        /*public ObservableCollection<DataClass> getMovingAvrage20()
+        {
+            return movingAvrage20;
+        }*/
     }
 }

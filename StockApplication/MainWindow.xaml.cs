@@ -67,7 +67,7 @@ namespace StockApplication
             if (e.Key == Key.Space)
             {
                 //Fire new event with new data
-                testClass.nextData();
+                //testClass.nextData();
             }
         }
 

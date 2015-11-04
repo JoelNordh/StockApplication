@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using DataConverter;
+using System.Collections.ObjectModel;
 
 namespace StockHandler
 {
@@ -22,7 +23,7 @@ namespace StockHandler
     
     public class TestClass
     {
-        List<DataClass> testList;
+        ObservableCollection<DataClass> testList;
         int i;
         public NewDataDelegate StockDataAdded;
 

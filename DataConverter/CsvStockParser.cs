@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic.FileIO;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -10,10 +11,9 @@ namespace DataConverter
 {
     public sealed class CsvStockParser : StockParser
     {
-        public List<DataClass> Parse(StreamReader stream)
+        public ObservableCollection<DataClass> Parse(StreamReader stream)
         {
-            List<DataClass> list = new List<DataClass>();
-            System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
+            ObservableCollection<DataClass> list = new ObservableCollection<DataClass>();
             using (TextFieldParser parser = new TextFieldParser(stream))
             {
                 parser.CommentTokens = new string[] { "#" };

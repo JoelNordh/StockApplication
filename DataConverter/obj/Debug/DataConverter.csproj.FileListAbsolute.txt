@@ -19,10 +19,11 @@ C:\Users\jn2957\Documents\Visual Studio 2015\Projects\StockApplication\DataConve
 C:\Users\jn2957\Documents\Visual Studio 2015\Projects\StockApplication\DataConverter\obj\Debug\DataConverter.csprojResolveAssemblyReference.cache
 C:\Users\jn2957\Documents\Visual Studio 2015\Projects\StockApplication\DataConverter\obj\Debug\DataConverter.dll
 C:\Users\jn2957\Documents\Visual Studio 2015\Projects\StockApplication\DataConverter\obj\Debug\DataConverter.pdb
+C:\Users\jn2957\Documents\git\StockApplication\DataConverter\bin\Debug\DataConverter.dll
+C:\Users\jn2957\Documents\git\StockApplication\DataConverter\bin\Debug\DataConverter.pdb
 C:\Users\jn2957\Documents\git\StockApplication\DataConverter\bin\Debug\System.Windows.Controls.Input.Toolkit.dll
 C:\Users\jn2957\Documents\git\StockApplication\DataConverter\bin\Debug\System.Windows.Controls.Layout.Toolkit.dll
 C:\Users\jn2957\Documents\git\StockApplication\DataConverter\bin\Debug\WPFToolkit.dll
-C:\Users\jn2957\Documents\git\StockApplication\DataConverter\bin\Debug\DataConverter.dll
-C:\Users\jn2957\Documents\git\StockApplication\DataConverter\bin\Debug\DataConverter.pdb
 C:\Users\jn2957\Documents\git\StockApplication\DataConverter\obj\Debug\DataConverter.dll
 C:\Users\jn2957\Documents\git\StockApplication\DataConverter\obj\Debug\DataConverter.pdb
+C:\Users\jn2957\Documents\git\StockApplication\DataConverter\obj\Debug\DataConverter.csprojResolveAssemblyReference.cache
