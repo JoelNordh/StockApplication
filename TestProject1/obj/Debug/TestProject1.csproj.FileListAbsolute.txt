@@ -17,3 +17,14 @@ C:\Users\jn2957\Documents\git\StockApplication\TestProject1\bin\Debug\DataConver
 C:\Users\jn2957\Documents\git\StockApplication\TestProject1\obj\Debug\TestProject1.csprojResolveAssemblyReference.cache
 C:\Users\jn2957\Documents\git\StockApplication\TestProject1\obj\Debug\TestProject1.dll
 C:\Users\jn2957\Documents\git\StockApplication\TestProject1\obj\Debug\TestProject1.pdb
+C:\Users\joeln\Source\Repos\StockApplication\TestProject1\bin\Debug\TestProject1.dll
+C:\Users\joeln\Source\Repos\StockApplication\TestProject1\bin\Debug\TestProject1.pdb
+C:\Users\joeln\Source\Repos\StockApplication\TestProject1\bin\Debug\DataConverter.dll
+C:\Users\joeln\Source\Repos\StockApplication\TestProject1\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+C:\Users\joeln\Source\Repos\StockApplication\TestProject1\bin\Debug\System.Windows.Controls.Input.Toolkit.dll
+C:\Users\joeln\Source\Repos\StockApplication\TestProject1\bin\Debug\System.Windows.Controls.Layout.Toolkit.dll
+C:\Users\joeln\Source\Repos\StockApplication\TestProject1\bin\Debug\WPFToolkit.dll
+C:\Users\joeln\Source\Repos\StockApplication\TestProject1\bin\Debug\DataConverter.pdb
+C:\Users\joeln\Source\Repos\StockApplication\TestProject1\obj\Debug\TestProject1.csprojResolveAssemblyReference.cache
+C:\Users\joeln\Source\Repos\StockApplication\TestProject1\obj\Debug\TestProject1.dll
+C:\Users\joeln\Source\Repos\StockApplication\TestProject1\obj\Debug\TestProject1.pdb

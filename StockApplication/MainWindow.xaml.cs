@@ -28,14 +28,14 @@ namespace StockApplication
         StockHandler.TestClass testClass = new TestClass(new CsvStockParser());
         StockHandler.StockHandler stockClass = new StockHandler.StockHandler();
 
-        private void plotData(ObservableCollection<PlotClass> list, Brush pen, String Description)
+        private void plotData(ObservableCollection<StockClass> list, Brush pen, String Description)
         {
             IPointDataSource point = null;
             LineGraph line;
             
 
-            EnumerableDataSource<PlotClass> _edsSPP;
-            _edsSPP = new EnumerableDataSource<PlotClass>(list);
+            EnumerableDataSource<StockClass> _edsSPP;
+            _edsSPP = new EnumerableDataSource<StockClass>(list);
             _edsSPP.SetXMapping(p => dateAxis.ConvertToDouble(p.date));
             _edsSPP.SetYMapping(p => p.value);
             point = _edsSPP;
@@ -43,6 +43,7 @@ namespace StockApplication
             line = new LineGraph(point);
             line.LinePen = new Pen(pen, 2);
             line.Description = new PenDescription(Description);
+            
             plotter.Children.Add(line);
             plotter.FitToView();
         }
@@ -51,15 +52,14 @@ namespace StockApplication
         {
             InitializeComponent();
 
-            //movingAvrage20 = ;
+            testClass.StockDataAdded += GotNewStockData;
 
-            plotData(toPlotClass(stockClass.getPriceList(), DataClass.priceChooser.CLOSINGPRICE), Brushes.Black, "Current Price");
-            //plotData(movingAvrage20, Brushes.BlueViolet, "MA 20");
-            //plotData(CalculateMovingAvrage(50), Brushes.Red, "MA 50");
-            //plotData(CalculateMovingAvrage(100), Brushes.Green, "MA 100");
-
-            //CalculateBolinger();
-
+            plotData(toStockClass(stockClass.priceList, DataClass.priceChooser.CLOSINGPRICE), Brushes.Black, "Current Price");
+            //plotData(stockClass.movingAvrage20, Brushes.BlueViolet, "MA 20");
+            //plotData(stockClass.movingAvrage50, Brushes.Red, "MA 50");
+            //plotData(stockClass.movingAvrage100, Brushes.Green, "MA 100");
+            //plotData(stockClass.UpperBolinger, Brushes.Pink, "Upper Boliger");
+            //plotData(stockClass.LowerBolinger, Brushes.Pink, "Upper Boliger");
         }
 
         private void Grid_KeyUp(object sender, KeyEventArgs e)
@@ -67,33 +67,39 @@ namespace StockApplication
             if (e.Key == Key.Space)
             {
                 //Fire new event with new data
-                //testClass.nextData();
+                  testClass.nextData();
             }
         }
 
-        public static ObservableCollection<PlotClass> toPlotClass(ObservableCollection<DataClass> data, DataClass.priceChooser choice)
+        public void GotNewStockData(object sender, NewDataEventArgs args)
         {
-            //List<PlotClass> toPlot = new List<PlotClass>();
-            ObservableCollection<PlotClass> toPlot = new ObservableCollection<PlotClass>();
+            stockClass.addTestData(args.Data);
+            Console.WriteLine(args.Data.closingPrice.ToString());
+        }
+
+
+        public static ObservableCollection<StockClass> toStockClass(ObservableCollection<DataClass> data, DataClass.priceChooser choice)
+        {
+            ObservableCollection<StockClass> toPlot = new ObservableCollection<StockClass>();
             foreach (DataClass Item in data)
             {
-                PlotClass plotClass;
+                StockClass plotClass;
                 switch (choice)
                 {
                     case DataClass.priceChooser.AVRAGEPRICE:
-                        plotClass = new PlotClass(Item.avragePrice, Item.date);
+                        plotClass = new StockClass(Item.avragePrice, Item.date);
                         break;
                     case DataClass.priceChooser.HIGHPRICE:
-                        plotClass = new PlotClass(Item.highPrice, Item.date);
+                        plotClass = new StockClass(Item.highPrice, Item.date);
                         break;
                     case DataClass.priceChooser.LOWPRICE:
-                        plotClass = new PlotClass(Item.lowPrice, Item.date);
+                        plotClass = new StockClass(Item.lowPrice, Item.date);
                         break;
                     case DataClass.priceChooser.CLOSINGPRICE:
-                        plotClass = new PlotClass(Item.closingPrice, Item.date);
+                        plotClass = new StockClass(Item.closingPrice, Item.date);
                         break;
                     default:
-                        plotClass = new PlotClass();
+                        plotClass = new StockClass();
                         break;
                 }
                 toPlot.Add(plotClass);

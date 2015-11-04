@@ -6,11 +6,8 @@ using System.Threading.Tasks;
 
 namespace StockApplication
 {
-    public class PlotClass
+    public class PlotClass : StockHandler.StockClass
     {
-        public DateTime date;
-        public double value;
-
         public PlotClass()
         {
         }

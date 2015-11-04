@@ -27,3 +27,10 @@ C:\Users\jn2957\Documents\git\StockApplication\DataConverter\bin\Debug\WPFToolki
 C:\Users\jn2957\Documents\git\StockApplication\DataConverter\obj\Debug\DataConverter.dll
 C:\Users\jn2957\Documents\git\StockApplication\DataConverter\obj\Debug\DataConverter.pdb
 C:\Users\jn2957\Documents\git\StockApplication\DataConverter\obj\Debug\DataConverter.csprojResolveAssemblyReference.cache
+C:\Users\joeln\Source\Repos\StockApplication\DataConverter\bin\Debug\DataConverter.dll
+C:\Users\joeln\Source\Repos\StockApplication\DataConverter\bin\Debug\DataConverter.pdb
+C:\Users\joeln\Source\Repos\StockApplication\DataConverter\bin\Debug\System.Windows.Controls.Input.Toolkit.dll
+C:\Users\joeln\Source\Repos\StockApplication\DataConverter\bin\Debug\System.Windows.Controls.Layout.Toolkit.dll
+C:\Users\joeln\Source\Repos\StockApplication\DataConverter\bin\Debug\WPFToolkit.dll
+C:\Users\joeln\Source\Repos\StockApplication\DataConverter\obj\Debug\DataConverter.dll
+C:\Users\joeln\Source\Repos\StockApplication\DataConverter\obj\Debug\DataConverter.pdb

@@ -27,25 +27,31 @@ namespace StockHandler
 
     public class StockHandler
     {
-        TestClass testClass = new TestClass(new CsvStockParser());
         CsvStockParser parser = new CsvStockParser();
 
-        ObservableCollection<DataClass> priceList;
-        ObservableCollection<StockClass> movingAvrage20;
-        ObservableCollection<StockClass> UpperBolinger = new ObservableCollection<StockClass>();
-        ObservableCollection<StockClass> LowerBolinger = new ObservableCollection<StockClass>();
+        public ObservableCollection<DataClass> priceList;
+        public ObservableCollection<StockClass> movingAvrage20;
+        public ObservableCollection<StockClass> movingAvrage50;
+        public ObservableCollection<StockClass> movingAvrage100;
+        public ObservableCollection<StockClass> UpperBolinger = new ObservableCollection<StockClass>();
+        public ObservableCollection<StockClass> LowerBolinger = new ObservableCollection<StockClass>();
 
         public StockHandler()
         {
-            testClass.StockDataAdded += GotNewStockData;
-            priceList = parser.Parse(new System.IO.StreamReader("history.csv"));
+            priceList = new ObservableCollection<DataClass>();
+
+            movingAvrage20 = CalculateMovingAvrage(20);
+            movingAvrage50 = CalculateMovingAvrage(50);
+            movingAvrage100 = CalculateMovingAvrage(100);
+
+            CalculateBolinger();
         }
 
-        private void GotNewStockData(object sender, NewDataEventArgs args)
+        public void addTestData(DataClass data)
         {
-            priceList.Add(args.Data);
-            Console.WriteLine(args.Data.closingPrice.ToString());
+            priceList.Add(data);
         }
+
 
         private ObservableCollection<StockClass> CalculateMovingAvrage(int avrage)
         {
@@ -81,14 +87,5 @@ namespace StockHandler
             }
         }
 
-        public ObservableCollection<DataClass> getPriceList()
-        {
-            return priceList;
-        }
-
-        /*public ObservableCollection<DataClass> getMovingAvrage20()
-        {
-            return movingAvrage20;
-        }*/
     }
 }
