@@ -28,82 +28,126 @@ namespace StockHandler
     public class StockHandler
     {
         CsvStockParser parser = new CsvStockParser();
+        StockTrader trader = new StockTrader();
 
         public ObservableCollection<DataClass> priceList;
         public ObservableCollection<StockClass> priceList2;
-        public ObservableCollection<StockClass> movingAvrage20 = new ObservableCollection<StockClass>();
+        public ObservableCollection<StockClass> movingAvrage20;
         public ObservableCollection<StockClass> movingAvrage50;
         public ObservableCollection<StockClass> movingAvrage100;
         public ObservableCollection<StockClass> UpperBolinger = new ObservableCollection<StockClass>();
         public ObservableCollection<StockClass> LowerBolinger = new ObservableCollection<StockClass>();
+        public ObservableCollection<StockClass> RSI;
 
         public StockHandler()
         {
             priceList = new ObservableCollection<DataClass>();
             priceList2 = new ObservableCollection<StockClass>();
 
-            //movingAvrage20 = CalculateMovingAvrage(20);
-            //movingAvrage50 = CalculateMovingAvrage(50);
-            //movingAvrage100 = CalculateMovingAvrage(100);
-
-            //CalculateBolinger();
+            movingAvrage20 = new ObservableCollection<StockClass>();
+            movingAvrage50 = new ObservableCollection<StockClass>();
+            movingAvrage100 = new ObservableCollection<StockClass>();
+            RSI = new ObservableCollection<StockClass>();
         }
 
         public void addTestData(DataClass data) 
         {
-            priceList.Add(data); 
+            priceList.Add(data);
+            
             priceList2.Add(new StockClass(data.closingPrice, data.date));
+            
 
-            movingAvrage20 = CalculateMovingAvrage(20);
-            //movingAvrage50 = CalculateMovingAvrage(50);
-            //movingAvrage100 = CalculateMovingAvrage(100);
+            CalculateMovingAvrage(20, ref movingAvrage20);
+            CalculateMovingAvrage(50, ref movingAvrage50);
+            CalculateMovingAvrage(100, ref movingAvrage100);
+            CalculateRSI(14);
+            if (movingAvrage20.Count > 0)
+            {
+                CalculateBolinger();
+            }
 
-            //if(movingAvrage20 != null)
-            //{
-            //    CalculateBolinger();
-            //}
+            if(MarketAnalyzer.analyzeMA(ref movingAvrage20, ref movingAvrage50) == MarketAnalyzer.signal.BUYSIGNAL)
+            {
+                trader.buyStock(1, data);
+            }
+            else if(MarketAnalyzer.analyzeMA(ref movingAvrage20, ref movingAvrage50) == MarketAnalyzer.signal.SELLSIGNAL)
+            {
+                trader.sellStock(1, data);
+            }
+            MarketAnalyzer.signal signal = MarketAnalyzer.analyzeRSI(ref RSI);
+            if (signal == MarketAnalyzer.signal.BUYSIGNAL)
+            {
+                trader.buyStock(1, data);
+            }
+            else if (signal == MarketAnalyzer.signal.SELLSIGNAL)
+            {
+                trader.sellStock(1, data);
+            }
         }
 
-
-        private ObservableCollection<StockClass> CalculateMovingAvrage(int avrage)
+        private void CalculateMovingAvrage(int avrage, ref ObservableCollection<StockClass> currentList)
         {
             ObservableCollection<StockClass> stockData = new ObservableCollection<StockClass>();
             double lastAvrage = 0;
 
-            if(priceList.Count < avrage)
+             if(priceList.Count < avrage)
             {
-                return null;
+                return;
             }
 
-            for (int i = avrage; i < priceList.Count; i++)
+            lastAvrage = 0;
+            for (int i = priceList.Count - avrage; i < priceList.Count; i++)
             {
-                lastAvrage = 0;
-                for (int y = i - avrage; y < i; y++)
-                {
-                    lastAvrage += priceList[y].closingPrice;
-                }
-                lastAvrage = lastAvrage / avrage;
-
-                stockData.Add(new StockClass(lastAvrage, priceList[i].date));
+                lastAvrage += priceList[i].closingPrice;
             }
-            return stockData;
+            lastAvrage = lastAvrage / avrage;
+            currentList.Add(new StockClass(lastAvrage, priceList.Last().date));
         }
 
         private void CalculateBolinger()
         {
-            for (int i = 0; i < movingAvrage20.Count; i++)
+            double deviationSquare = 0;
+            for (int i = priceList.Count-20; i < priceList.Count; i++)
             {
-                double deviationSquare = 0;
-                for (int y = 20 + i; y > i; y--)
-                {
-                    deviationSquare += Math.Pow(movingAvrage20[i].value - priceList[y].closingPrice, 2);
-                }
-                deviationSquare = Math.Sqrt(deviationSquare / 20);
-
-                UpperBolinger.Add(new StockClass(movingAvrage20[i].value + (deviationSquare * 2), movingAvrage20[i].date));
-                LowerBolinger.Add(new StockClass(movingAvrage20[i].value - (deviationSquare * 2), movingAvrage20[i].date));
+                deviationSquare += Math.Pow(movingAvrage20.Last().value - priceList[i].closingPrice, 2);
             }
+
+            deviationSquare = Math.Sqrt(deviationSquare / 20);
+
+            UpperBolinger.Add(new StockClass(movingAvrage20.Last().value + (deviationSquare * 2), movingAvrage20.Last().date));
+            LowerBolinger.Add(new StockClass(movingAvrage20.Last().value - (deviationSquare * 2), movingAvrage20.Last().date));
+        }
+
+        private void CalculateRSI(int RSIHistory)
+        {
+            double sumGain = 0;
+            double sumLoss = 0;
+            
+            if(RSIHistory > priceList.Count)
+            {
+                return;
+            }
+
+            for (int i = priceList.Count - RSIHistory + 1; i < priceList.Count; i++)
+            {
+                var difference = priceList[i].closingPrice - priceList[i - 1].closingPrice;
+                if (difference >= 0)
+                {
+                    sumGain += difference;
+                }
+                else
+                {
+                    sumLoss -= difference;
+                }
+            }
+            if (sumGain == 0) RSI.Add(new StockClass(0, priceList.Last().date));
+            if (Math.Abs(sumLoss) < 0.0000001) RSI.Add(new StockClass(100, priceList.Last().date));
+            var relativeStrength = sumGain / sumLoss;
+            RSI.Add(new StockClass(100.0 - (100.0 / (1 + relativeStrength)), priceList.Last().date));
+
+            //RSI.Last().value = RSI.Last().value + 1000;
         }
 
     }
 }
+

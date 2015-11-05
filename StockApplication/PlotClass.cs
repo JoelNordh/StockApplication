@@ -17,5 +17,15 @@ namespace StockApplication
             this.value = value;
             this.date = date;
         }
+
+        public void buyIndicator(double price)
+        {
+
+        }
+        
+        public void sellIndicator(double price)
+        {
+
+        }
     }
 }

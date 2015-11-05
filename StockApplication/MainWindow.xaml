@@ -26,5 +26,6 @@
             <d3:HorizontalAxisTitle Content="Date"/>
         </d3:ChartPlotter>
         <Label Content="Push space to advance data"/>
+        <Label Content="{Binding Path=CurrentBalance, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" VerticalAlignment="Top" />
     </Grid>
 </Window>

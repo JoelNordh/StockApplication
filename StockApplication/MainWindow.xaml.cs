@@ -17,6 +17,9 @@ using Microsoft.Research.DynamicDataDisplay;
 using System.Collections.ObjectModel;
 using StockHandler;
 using DataConverter;
+using System.Threading;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace StockApplication
 {
@@ -27,6 +30,10 @@ namespace StockApplication
     {     
         StockHandler.TestClass testClass = new TestClass(new CsvStockParser());
         StockHandler.StockHandler stockClass = new StockHandler.StockHandler();
+        StockHandler.StockTrader stockTrader = new StockTrader();
+        PropertyClass propertyChanger = new PropertyClass();
+
+
 
         private void plotData(ref ObservableCollection<StockClass> list, Brush pen, String Description)
         {
@@ -51,33 +58,78 @@ namespace StockApplication
         public MainWindow()
         {
             InitializeComponent();
+            
+            //testClass.StockDataAdded += GotNewStockData;
 
-            testClass.StockDataAdded += GotNewStockData;
+            stockTrader.StockTraded += plotTradedStock;
+
+            this.DataContext = propertyChanger;
 
             plotData(ref stockClass.priceList2, Brushes.Black, "Current Price");
-            
+
             //plotData(stockClass.movingAvrage50, Brushes.Red, "MA 50");
             //plotData(stockClass.movingAvrage100, Brushes.Green, "MA 100");
             //plotData(stockClass.UpperBolinger, Brushes.Pink, "Upper Boliger");
             //plotData(stockClass.LowerBolinger, Brushes.Pink, "Upper Boliger");
         }
 
+        private void plotTradedStock(object sender, NewTradeEventArgs args)
+        {
+            //propertyChanger.CurrentBalance = args.Data.ToString();
+        }
+
+        bool testRunning; 
         private void Grid_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Space)
             {
+                if (testRunning == false)
+                {
+                    testRunning = true;
+                    new Task(() =>
+                    {
+                        testClass.StockDataAdded += GotNewStockData;
+                        while (testClass.HasMoreData())
+                        {
+
+                            testClass.nextData();
+                        }
+                    }).Start();
+                }
                 //Fire new event with new data
-                  testClass.nextData();
+                //testClass.nextData();
             }
         }
 
         public void GotNewStockData(object sender, NewDataEventArgs args)
         {
-            stockClass.addTestData(args.Data);
-            Console.WriteLine(args.Data.closingPrice.ToString());
-            if (stockClass.priceList.Count == 20)
-                     plotData(ref stockClass.movingAvrage20, Brushes.BlueViolet, "MA 20");
+            this.Dispatcher.Invoke((Action)(() =>
+            {
+                stockClass.addTestData(args.Data);
+
+
+                if(stockClass.priceList.Count == 14)
+                {
+                    plotData(ref stockClass.RSI, Brushes.BurlyWood, "RSI");
+                }
+                else if (stockClass.priceList.Count == 20)
+                {
+                    plotData(ref stockClass.movingAvrage20, Brushes.BlueViolet, "MA 20");
+                    plotData(ref stockClass.UpperBolinger, Brushes.Pink, "Upper Bolinger");
+                    plotData(ref stockClass.LowerBolinger, Brushes.Pink, "Lower Bolinger");
+                }
+                else if (stockClass.priceList.Count == 50)
+                {
+                    plotData(ref stockClass.movingAvrage50, Brushes.Red, "MA 50");
+                }
+                else if (stockClass.priceList.Count == 100)
+                {
+                    plotData(ref stockClass.movingAvrage100, Brushes.Green, "MA 100");
+                }
+            }));
+
         }
+
 
 
         public static ObservableCollection<StockClass> toStockClass(ObservableCollection<DataClass> data, DataClass.priceChooser choice)
@@ -107,6 +159,31 @@ namespace StockApplication
                 toPlot.Add(plotClass);
             }
             return toPlot;
+        }
+    }
+
+    public class PropertyClass : INotifyPropertyChanged
+    {
+        private string balance;
+        public string CurrentBalance
+        {
+            get
+            {
+                return "Current balance: " + balance;
+            }
+            set
+            {
+                balance = value;
+                NotifyPropertyChanged();
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        {
+            var handler = PropertyChanged;
+            if (handler != null) handler(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

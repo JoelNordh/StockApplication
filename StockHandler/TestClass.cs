@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using DataConverter;
 using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace StockHandler
 {
@@ -23,11 +24,9 @@ namespace StockHandler
     
     public class TestClass
     {
-        ObservableCollection<DataClass> testList;
+        public ObservableCollection<DataClass> testList;
         int i;
         public NewDataDelegate StockDataAdded;
-
-        
 
         protected virtual void OnStockDataAdded(NewDataEventArgs args)
         {
@@ -46,9 +45,17 @@ namespace StockHandler
 
         public void nextData()
         {
+            Thread.Sleep(1);
             OnStockDataAdded(new NewDataEventArgs(testList[i++]));
+
         }
 
-        
+        public bool HasMoreData()
+        {
+            if (i < testList.Count)
+                return true;
+            else
+                return false;
+        }
     }
 }
