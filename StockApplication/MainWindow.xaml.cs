@@ -14,12 +14,14 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.Research.DynamicDataDisplay.DataSources;
 using Microsoft.Research.DynamicDataDisplay;
+using Microsoft.Research.DynamicDataDisplay.PointMarkers;
 using System.Collections.ObjectModel;
 using StockHandler;
 using DataConverter;
 using System.Threading;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Microsoft.Research.DynamicDataDisplay.Common;
 
 namespace StockApplication
 {
@@ -29,13 +31,15 @@ namespace StockApplication
     public partial class MainWindow : Window
     {     
         StockHandler.TestClass testClass = new TestClass(new CsvStockParser());
-        StockHandler.StockHandler stockClass = new StockHandler.StockHandler();
         StockHandler.StockTrader stockTrader = new StockTrader();
+        StockHandler.StockHandler stockClass;
+        
         PropertyClass propertyChanger = new PropertyClass();
+        ObservableCollection<StockClass> buyPoints = new ObservableCollection<StockClass>();
+        ObservableCollection<StockClass> sellPoints = new ObservableCollection<StockClass>();
 
-
-
-        private void plotData(ref ObservableCollection<StockClass> list, Brush pen, String Description)
+        #region plotTools
+        private void plotData(ObservableCollection<StockClass> list, Brush pen, String Description, ChartPlotter graph)
         {
             IPointDataSource point = null;
             LineGraph line;
@@ -43,6 +47,8 @@ namespace StockApplication
 
             EnumerableDataSource<StockClass> _edsSPP;
             _edsSPP = new EnumerableDataSource<StockClass>(list);
+            
+            
             _edsSPP.SetXMapping(p => dateAxis.ConvertToDouble(p.date));
             _edsSPP.SetYMapping(p => p.value);
             point = _edsSPP;
@@ -50,22 +56,65 @@ namespace StockApplication
             line = new LineGraph(point);
             line.LinePen = new Pen(pen, 2);
             line.Description = new PenDescription(Description);
-            
-            plotter.Children.Add(line);
-            plotter.FitToView();
+
+            graph.Children.Add(line);
+            graph.FitToView();
         }
+
+        private void plotSellEvent(ObservableCollection<StockClass> list)
+        {
+            IPointDataSource point = null;
+            CirclePointMarker marker = new CirclePointMarker();
+
+            EnumerableDataSource<StockClass> _edsSPP;
+            _edsSPP = new EnumerableDataSource<StockClass>(list);
+            _edsSPP.SetXMapping(p => dateAxis.ConvertToDouble(p.date));
+            _edsSPP.SetYMapping(p => p.value);
+            point = _edsSPP;
+
+            SellMarkerGraph.DataSource = point;
+
+            marker.Size = 10;
+            marker.Fill = new SolidColorBrush(Colors.Red);
+            marker.Pen = new Pen(new SolidColorBrush(Colors.Black), 2.0);
+            SellMarkerGraph.Marker = marker;     
+        }
+        private void plotBuyEvent(ObservableCollection<StockClass> list)
+        {
+            IPointDataSource point = null;
+            CirclePointMarker marker = new CirclePointMarker();
+
+            EnumerableDataSource<StockClass> _edsSPP;
+            _edsSPP = new EnumerableDataSource<StockClass>(list);
+            _edsSPP.SetXMapping(p => dateAxis.ConvertToDouble(p.date));
+            _edsSPP.SetYMapping(p => p.value);
+            point = _edsSPP;
+
+            BuyMarkerGraph.DataSource = point;
+
+            marker.Size = 10;
+            marker.Fill = new SolidColorBrush(Colors.Blue);
+            marker.Pen = new Pen(new SolidColorBrush(Colors.Black), 2.0);
+            BuyMarkerGraph.Marker = marker;
+        }
+        #endregion
 
         public MainWindow()
         {
             InitializeComponent();
-            
+            stockClass = new StockHandler.StockHandler(stockTrader);
             //testClass.StockDataAdded += GotNewStockData;
 
-            stockTrader.StockTraded += plotTradedStock;
+            stockTrader.StockSold += plotSoldStock;
+            stockTrader.StockBought += plotBoughtStock;
+
+            plotter.Viewport.PropertyChanged += Viewport_PropertyChanged;
 
             this.DataContext = propertyChanger;
 
-            plotData(ref stockClass.priceList2, Brushes.Black, "Current Price");
+            plotData(stockClass.priceList2, Brushes.Black, "Current Price", plotter);
+            plotSellEvent(sellPoints);
+            plotBuyEvent(buyPoints);
 
             //plotData(stockClass.movingAvrage50, Brushes.Red, "MA 50");
             //plotData(stockClass.movingAvrage100, Brushes.Green, "MA 100");
@@ -73,9 +122,23 @@ namespace StockApplication
             //plotData(stockClass.LowerBolinger, Brushes.Pink, "Upper Boliger");
         }
 
-        private void plotTradedStock(object sender, NewTradeEventArgs args)
+        private void Viewport_PropertyChanged(object sender, ExtendedPropertyChangedEventArgs e)
         {
-            //propertyChanger.CurrentBalance = args.Data.ToString();
+            if (e.PropertyName == "Visible")
+            {
+                RSIPlotter.Viewport.Visible = new DataRect(plotter.Viewport.Visible.X, RSIPlotter.Viewport.Visible.Y, plotter.Viewport.Visible.Width, RSIPlotter.Viewport.Visible.Height);
+            }
+        }
+
+        private void plotBoughtStock(object sender, TradeEventArgs args)
+        {
+            buyPoints.Add(new StockClass(args.Data.closingPrice, args.Data.date));
+        }
+
+        private void plotSoldStock(object sender, TradeEventArgs args)
+        {
+            propertyChanger.CurrentBalance = args.Balance.ToString();
+            sellPoints.Add(new StockClass(args.Data.closingPrice, args.Data.date));
         }
 
         bool testRunning; 
@@ -110,21 +173,21 @@ namespace StockApplication
 
                 if(stockClass.priceList.Count == 14)
                 {
-                    plotData(ref stockClass.RSI, Brushes.BurlyWood, "RSI");
+                    plotData(stockClass.RSI, Brushes.BurlyWood, "RSI", RSIPlotter);
                 }
                 else if (stockClass.priceList.Count == 20)
                 {
-                    plotData(ref stockClass.movingAvrage20, Brushes.BlueViolet, "MA 20");
-                    plotData(ref stockClass.UpperBolinger, Brushes.Pink, "Upper Bolinger");
-                    plotData(ref stockClass.LowerBolinger, Brushes.Pink, "Lower Bolinger");
+                    plotData(stockClass.movingAvrage20, Brushes.BlueViolet, "MA 20", plotter);
+                    plotData(stockClass.UpperBolinger, Brushes.Pink, "Upper Bolinger", plotter);
+                    plotData(stockClass.LowerBolinger, Brushes.Pink, "Lower Bolinger", plotter);
                 }
                 else if (stockClass.priceList.Count == 50)
                 {
-                    plotData(ref stockClass.movingAvrage50, Brushes.Red, "MA 50");
+                    plotData(stockClass.movingAvrage50, Brushes.Red, "MA 50", plotter);
                 }
                 else if (stockClass.priceList.Count == 100)
                 {
-                    plotData(ref stockClass.movingAvrage100, Brushes.Green, "MA 100");
+                    plotData(stockClass.movingAvrage100, Brushes.Green, "MA 100", plotter);
                 }
             }));
 

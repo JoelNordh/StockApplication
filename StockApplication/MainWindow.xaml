@@ -7,16 +7,17 @@
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
         xmlns:stockData="clr-namespace:StockHandler;assembly=StockHandler"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="1000">
+        Title="MainWindow" Height="1000" Width="1000">
     <Grid KeyUp="Grid_KeyUp">
         <Grid.RowDefinitions>
             <RowDefinition Height="20"/>
             <RowDefinition Height="500"/>
             <RowDefinition Height="150"/>
+            <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
         <d3:ChartPlotter Name="plotter" Grid.Row="1">
             <d3:ChartPlotter.Resources>
-                 <local:Date2AxisConverter x:Key="Date2AxisConverter"/>
+                <local:Date2AxisConverter x:Key="Date2AxisConverter"/>
             </d3:ChartPlotter.Resources>
             <d3:ChartPlotter.HorizontalAxis>
                 <d3:HorizontalDateTimeAxis Name="dateAxis"/>
@@ -24,8 +25,14 @@
             <d3:Header Content="{Binding PlotHeader}"/>
             <d3:VerticalAxisTitle Content="Value"/>
             <d3:HorizontalAxisTitle Content="Date"/>
+            <d3:MarkerPointsGraph Name="SellMarkerGraph" Grid.Row="1"/>
+            <d3:MarkerPointsGraph Name="BuyMarkerGraph" Grid.Row="1"/>
+        </d3:ChartPlotter>
+        <d3:ChartPlotter Name="RSIPlotter" Grid.Row="2">
+            <d3:Header Content="{Binding PlotHeader}"/>
+            <d3:VerticalAxisTitle Content="Value"/>
         </d3:ChartPlotter>
         <Label Content="Push space to advance data"/>
-        <Label Content="{Binding Path=CurrentBalance, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" VerticalAlignment="Top" />
+        <Label Content="{Binding Path=CurrentBalance, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" VerticalAlignment="Top" />
     </Grid>
 </Window>

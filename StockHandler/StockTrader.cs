@@ -7,33 +7,30 @@ using DataConverter;
 
 namespace StockHandler
 {
-    public class NewTradeEventArgs : EventArgs
+    public class TradeEventArgs : EventArgs
     {
         public DataClass Data { get; }
-        public enum TRADE { BUY, SELL }
-        TRADE CurrentTrade { get; }
-        double Balance;
+        public double Balance { get; }
 
-        public NewTradeEventArgs(double balance, DataClass data, TRADE trade)
+        public TradeEventArgs(double balance, DataClass data)
         {
             Data = data;
-            CurrentTrade = trade;
             Balance = balance;
         }
     }
 
-    public delegate void NewTradeDelegate(object sender, NewTradeEventArgs args);
+    public delegate void TradeDelegate(object sender, TradeEventArgs args);
 
     public class StockTrader
     {
-        List<DataConverter.DataClass> possesion;
+        private List<DataClass> possesion;
         double balance;
-        public NewTradeDelegate StockTraded;
-        public enum TRADE { BUY, SELL }
+        public TradeDelegate StockSold;
+        public TradeDelegate StockBought;
 
         public StockTrader()
         {
-            possesion = new List<DataConverter.DataClass>();
+            possesion = new List<DataClass>();
             balance = 10000;
         }
 
@@ -55,7 +52,7 @@ namespace StockHandler
 
             balance = balance * 1;
 
-            OnStockTrade(new NewTradeEventArgs(balance, buyDetails, NewTradeEventArgs.TRADE.BUY));
+            OnStockBought(new TradeEventArgs(balance, buyDetails));
         }
 
         public void sellStock(int amount, DataClass sellDetails)
@@ -67,15 +64,23 @@ namespace StockHandler
 
                 possesion.RemoveAt(0);
 
-                OnStockTrade(new NewTradeEventArgs(balance, sellDetails, NewTradeEventArgs.TRADE.SELL));
+                OnStockSold(new TradeEventArgs(balance, sellDetails));
             }
         }
 
-        protected virtual void OnStockTrade(NewTradeEventArgs args)
+        protected virtual void OnStockSold(TradeEventArgs args)
         {
-            if (StockTraded != null)
+            if (StockSold != null)
             {
-                StockTraded(this, args);
+                StockSold(this, args);
+            }
+        }
+
+        protected virtual void OnStockBought(TradeEventArgs args)
+        {
+            if (StockBought != null)
+            {
+                StockBought(this, args);
             }
         }
 

@@ -12,7 +12,7 @@ namespace StockHandler
         StockTrader trader = new StockTrader();
         public enum signal { NOSIGNAL, BUYSIGNAL, SELLSIGNAL };
 
-        public static signal analyzeMA(ref ObservableCollection<StockClass> movingAvrageShort, ref ObservableCollection<StockClass> movingAvrageLong)
+        public static signal analyzeMA(ObservableCollection<StockClass> movingAvrageShort, ObservableCollection<StockClass> movingAvrageLong)
         {
             //if (movingAvrageLong.Count >= 2)
             //{
@@ -32,7 +32,7 @@ namespace StockHandler
         private enum state { BELOW30, ABOVE70, ABOVE50, BELOW50}
         private static state currentState = new state();
 
-        public static signal analyzeRSI(ref ObservableCollection<StockClass> RSI)
+        public static signal analyzeRSI(ObservableCollection<StockClass> RSI)
         {
             if (RSI.Count < 1)
             {

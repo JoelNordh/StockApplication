@@ -28,7 +28,7 @@ namespace StockHandler
     public class StockHandler
     {
         CsvStockParser parser = new CsvStockParser();
-        StockTrader trader = new StockTrader();
+        StockTrader trader;
 
         public ObservableCollection<DataClass> priceList;
         public ObservableCollection<StockClass> priceList2;
@@ -39,7 +39,7 @@ namespace StockHandler
         public ObservableCollection<StockClass> LowerBolinger = new ObservableCollection<StockClass>();
         public ObservableCollection<StockClass> RSI;
 
-        public StockHandler()
+        public StockHandler(StockTrader trader)
         {
             priceList = new ObservableCollection<DataClass>();
             priceList2 = new ObservableCollection<StockClass>();
@@ -48,6 +48,8 @@ namespace StockHandler
             movingAvrage50 = new ObservableCollection<StockClass>();
             movingAvrage100 = new ObservableCollection<StockClass>();
             RSI = new ObservableCollection<StockClass>();
+
+            this.trader = trader;
         }
 
         public void addTestData(DataClass data) 
@@ -55,26 +57,27 @@ namespace StockHandler
             priceList.Add(data);
             
             priceList2.Add(new StockClass(data.closingPrice, data.date));
-            
 
-            CalculateMovingAvrage(20, ref movingAvrage20);
-            CalculateMovingAvrage(50, ref movingAvrage50);
-            CalculateMovingAvrage(100, ref movingAvrage100);
+            string breakpointString = data.date.Date.ToString();
+
+            CalculateMovingAvrage(20, movingAvrage20);
+            CalculateMovingAvrage(50, movingAvrage50);
+            CalculateMovingAvrage(100, movingAvrage100);
             CalculateRSI(14);
             if (movingAvrage20.Count > 0)
             {
                 CalculateBolinger();
             }
 
-            if(MarketAnalyzer.analyzeMA(ref movingAvrage20, ref movingAvrage50) == MarketAnalyzer.signal.BUYSIGNAL)
+            if(MarketAnalyzer.analyzeMA(movingAvrage20, movingAvrage50) == MarketAnalyzer.signal.BUYSIGNAL)
             {
                 trader.buyStock(1, data);
             }
-            else if(MarketAnalyzer.analyzeMA(ref movingAvrage20, ref movingAvrage50) == MarketAnalyzer.signal.SELLSIGNAL)
+            else if(MarketAnalyzer.analyzeMA(movingAvrage20, movingAvrage50) == MarketAnalyzer.signal.SELLSIGNAL)
             {
                 trader.sellStock(1, data);
             }
-            MarketAnalyzer.signal signal = MarketAnalyzer.analyzeRSI(ref RSI);
+            MarketAnalyzer.signal signal = MarketAnalyzer.analyzeRSI(RSI);
             if (signal == MarketAnalyzer.signal.BUYSIGNAL)
             {
                 trader.buyStock(1, data);
@@ -85,7 +88,7 @@ namespace StockHandler
             }
         }
 
-        private void CalculateMovingAvrage(int avrage, ref ObservableCollection<StockClass> currentList)
+        private void CalculateMovingAvrage(int avrage, ObservableCollection<StockClass> currentList)
         {
             ObservableCollection<StockClass> stockData = new ObservableCollection<StockClass>();
             double lastAvrage = 0;
