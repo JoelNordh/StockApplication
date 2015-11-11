@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace StockApplication
 {
-    public class PlotClass : StockHandler.StockClass
+    public class PlotClass : StockHandler.StockData
     {
         public PlotClass()
         {

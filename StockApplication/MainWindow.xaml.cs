@@ -33,20 +33,21 @@ namespace StockApplication
         StockHandler.TestClass testClass = new TestClass(new CsvStockParser());
         StockHandler.StockTrader stockTrader = new StockTrader();
         StockHandler.StockHandler stockClass;
-        
+        StockDataStorage stockDataStorage;
+
         PropertyClass propertyChanger = new PropertyClass();
-        ObservableCollection<StockClass> buyPoints = new ObservableCollection<StockClass>();
-        ObservableCollection<StockClass> sellPoints = new ObservableCollection<StockClass>();
+        Collection<StockData> buyPoints = new ObservableCollection<StockData>();
+        Collection<StockData> sellPoints = new ObservableCollection<StockData>();
 
         #region plotTools
-        private void plotData(ObservableCollection<StockClass> list, Brush pen, String Description, ChartPlotter graph)
+        private void plotData(Collection<StockData> list, Brush pen, String Description, ChartPlotter graph)
         {
             IPointDataSource point = null;
             LineGraph line;
             
 
-            EnumerableDataSource<StockClass> _edsSPP;
-            _edsSPP = new EnumerableDataSource<StockClass>(list);
+            EnumerableDataSource<StockData> _edsSPP;
+            _edsSPP = new EnumerableDataSource<StockData>(list);
             
             
             _edsSPP.SetXMapping(p => dateAxis.ConvertToDouble(p.date));
@@ -61,13 +62,13 @@ namespace StockApplication
             graph.FitToView();
         }
 
-        private void plotSellEvent(ObservableCollection<StockClass> list)
+        private void plotSellEvent(Collection<StockData> list)
         {
             IPointDataSource point = null;
             CirclePointMarker marker = new CirclePointMarker();
 
-            EnumerableDataSource<StockClass> _edsSPP;
-            _edsSPP = new EnumerableDataSource<StockClass>(list);
+            EnumerableDataSource<StockData> _edsSPP;
+            _edsSPP = new EnumerableDataSource<StockData>(list);
             _edsSPP.SetXMapping(p => dateAxis.ConvertToDouble(p.date));
             _edsSPP.SetYMapping(p => p.value);
             point = _edsSPP;
@@ -79,13 +80,13 @@ namespace StockApplication
             marker.Pen = new Pen(new SolidColorBrush(Colors.Black), 2.0);
             SellMarkerGraph.Marker = marker;     
         }
-        private void plotBuyEvent(ObservableCollection<StockClass> list)
+        private void plotBuyEvent(Collection<StockData> list)
         {
             IPointDataSource point = null;
             CirclePointMarker marker = new CirclePointMarker();
 
-            EnumerableDataSource<StockClass> _edsSPP;
-            _edsSPP = new EnumerableDataSource<StockClass>(list);
+            EnumerableDataSource<StockData> _edsSPP;
+            _edsSPP = new EnumerableDataSource<StockData>(list);
             _edsSPP.SetXMapping(p => dateAxis.ConvertToDouble(p.date));
             _edsSPP.SetYMapping(p => p.value);
             point = _edsSPP;
@@ -102,7 +103,8 @@ namespace StockApplication
         public MainWindow()
         {
             InitializeComponent();
-            stockClass = new StockHandler.StockHandler(stockTrader);
+            stockDataStorage = new StockDataStorage();
+            stockClass = new StockHandler.StockHandler(stockTrader, stockDataStorage);
             //testClass.StockDataAdded += GotNewStockData;
 
             stockTrader.StockSold += plotSoldStock;
@@ -112,7 +114,7 @@ namespace StockApplication
 
             this.DataContext = propertyChanger;
 
-            plotData(stockClass.priceList2, Brushes.Black, "Current Price", plotter);
+            plotData(stockDataStorage.Get(IdentifierConstants.PRICE_LIST), Brushes.Black, "Current Price", plotter);
             plotSellEvent(sellPoints);
             plotBuyEvent(buyPoints);
 
@@ -132,13 +134,13 @@ namespace StockApplication
 
         private void plotBoughtStock(object sender, TradeEventArgs args)
         {
-            buyPoints.Add(new StockClass(args.Data.closingPrice, args.Data.date));
+            buyPoints.Add(new StockData(args.Data.closingPrice, args.Data.date));
         }
 
         private void plotSoldStock(object sender, TradeEventArgs args)
         {
             propertyChanger.CurrentBalance = args.Balance.ToString();
-            sellPoints.Add(new StockClass(args.Data.closingPrice, args.Data.date));
+            sellPoints.Add(new StockData(args.Data.closingPrice, args.Data.date));
         }
 
         bool testRunning; 
@@ -173,21 +175,21 @@ namespace StockApplication
 
                 if(stockClass.priceList.Count == 14)
                 {
-                    plotData(stockClass.RSI, Brushes.BurlyWood, "RSI", RSIPlotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.RSI), Brushes.BurlyWood, "RSI", RSIPlotter);
                 }
                 else if (stockClass.priceList.Count == 20)
                 {
-                    plotData(stockClass.movingAvrage20, Brushes.BlueViolet, "MA 20", plotter);
-                    plotData(stockClass.UpperBolinger, Brushes.Pink, "Upper Bolinger", plotter);
-                    plotData(stockClass.LowerBolinger, Brushes.Pink, "Lower Bolinger", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE,20), Brushes.BlueViolet, "MA 20", plotter);
+                    //plotData(stockClass.UpperBolinger, Brushes.Pink, "Upper Bolinger", plotter);
+                    //plotData(stockClass.LowerBolinger, Brushes.Pink, "Lower Bolinger", plotter);
                 }
                 else if (stockClass.priceList.Count == 50)
                 {
-                    plotData(stockClass.movingAvrage50, Brushes.Red, "MA 50", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 50), Brushes.Red, "MA 50", plotter);
                 }
                 else if (stockClass.priceList.Count == 100)
                 {
-                    plotData(stockClass.movingAvrage100, Brushes.Green, "MA 100", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 100), Brushes.Green, "MA 100", plotter);
                 }
             }));
 
@@ -195,28 +197,28 @@ namespace StockApplication
 
 
 
-        public static ObservableCollection<StockClass> toStockClass(ObservableCollection<DataClass> data, DataClass.priceChooser choice)
+        public static ObservableCollection<StockData> toStockClass(ObservableCollection<DataClass> data, DataClass.priceChooser choice)
         {
-            ObservableCollection<StockClass> toPlot = new ObservableCollection<StockClass>();
+            ObservableCollection<StockData> toPlot = new ObservableCollection<StockData>();
             foreach (DataClass Item in data)
             {
-                StockClass plotClass;
+                StockData plotClass;
                 switch (choice)
                 {
                     case DataClass.priceChooser.AVRAGEPRICE:
-                        plotClass = new StockClass(Item.avragePrice, Item.date);
+                        plotClass = new StockData(Item.avragePrice, Item.date);
                         break;
                     case DataClass.priceChooser.HIGHPRICE:
-                        plotClass = new StockClass(Item.highPrice, Item.date);
+                        plotClass = new StockData(Item.highPrice, Item.date);
                         break;
                     case DataClass.priceChooser.LOWPRICE:
-                        plotClass = new StockClass(Item.lowPrice, Item.date);
+                        plotClass = new StockData(Item.lowPrice, Item.date);
                         break;
                     case DataClass.priceChooser.CLOSINGPRICE:
-                        plotClass = new StockClass(Item.closingPrice, Item.date);
+                        plotClass = new StockData(Item.closingPrice, Item.date);
                         break;
                     default:
-                        plotClass = new StockClass();
+                        plotClass = new StockData();
                         break;
                 }
                 toPlot.Add(plotClass);
