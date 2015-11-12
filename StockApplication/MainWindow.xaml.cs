@@ -161,7 +161,8 @@ namespace StockApplication
 
                 if(stockClass.priceList.Count == 14)
                 {
-                    plotData(stockDataStorage.Get(IdentifierConstants.RSI), Brushes.BurlyWood, "RSI", RSIPlotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.RSI, 1), Brushes.BurlyWood, "RSI", RSIPlotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.RSI, 2), Brushes.DarkOliveGreen, "RSI Test", RSIPlotter);
                 }
                 else if (stockClass.priceList.Count == 20)
                 {

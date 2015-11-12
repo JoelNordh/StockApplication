@@ -48,7 +48,8 @@ namespace StockHandler
             stockDataStorage.Add(IdentifierConstants.MOVING_AVERAGE, 20, new ObservableCollection<StockData>());
             stockDataStorage.Add(IdentifierConstants.MOVING_AVERAGE, 50, new ObservableCollection<StockData>());
             stockDataStorage.Add(IdentifierConstants.MOVING_AVERAGE, 100, new ObservableCollection<StockData>());
-            stockDataStorage.Add(IdentifierConstants.RSI, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.RSI, 1, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.RSI, 2, new ObservableCollection<StockData>());
             stockDataStorage.Add(IdentifierConstants.PRICE_LIST, new ObservableCollection<StockData>());
             stockDataStorage.Add(IdentifierConstants.UPPERBOLINGER, new ObservableCollection<StockData>());
             stockDataStorage.Add(IdentifierConstants.LOWERBOLINGER, new ObservableCollection<StockData>());
@@ -56,7 +57,8 @@ namespace StockHandler
             Calculators = new List<ICalculator>();
 
             Array.ForEach(new int[] { 20, 50, 100 }, x => Calculators.Add(new CalculateMovingAverage(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, x), priceList, x)));
-            Calculators.Add(new CalculateRSI(stockDataStorage.Get(IdentifierConstants.RSI), stockDataStorage.Get(IdentifierConstants.PRICE_LIST), 14));
+            Calculators.Add(new CalculateRSI(stockDataStorage.Get(IdentifierConstants.RSI, 1), stockDataStorage.Get(IdentifierConstants.PRICE_LIST), 14));
+            Calculators.Add(new CalculateRSI(stockDataStorage.Get(IdentifierConstants.RSI, 2), stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 20), 30));
             Calculators.Add(new CalculateBolingerBand(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER),
                 stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), priceList, stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 20)));
 
@@ -70,9 +72,9 @@ namespace StockHandler
             stockDataStorage.Get(IdentifierConstants.PRICE_LIST).Add(new StockData(data.closingPrice, data.date));
 
             Calculators.ForEach(c => c.Calculate());
-
-            MarketAnalyzer.signal signal = MarketAnalyzer.analyzeRSI(stockDataStorage.Get(IdentifierConstants.RSI));
-            if (signal == MarketAnalyzer.signal.SELLSIGNAL || MarketAnalyzer.StopLoss(data.closingPrice) == MarketAnalyzer.signal.STOPLOSS)
+            MarketAnalyzer.analyzeMaRSI(stockDataStorage.Get(IdentifierConstants.RSI, 2));
+            MarketAnalyzer.signal signal = MarketAnalyzer.analyzeRSI(stockDataStorage.Get(IdentifierConstants.RSI, 1));
+            if (signal == MarketAnalyzer.signal.SELLSIGNAL)
             {
                 trader.sellStock(1, data);
                 MarketAnalyzer.ClearStopLoss();

@@ -57,9 +57,10 @@ namespace StockHandler
 
         private enum state { BELOW30, ABOVE70, ABOVE50, BELOW50}
         private static state currentState = new state();
+        private static state currentStateMaRSI = new state();
 
-        const int lowerRSI = 27;
-        const int higherRSI = 73;
+        static double lowerRSI = 27;
+        static double higherRSI = 73;
 
         public static signal analyzeRSI(Collection<StockData> RSI)
         {
@@ -124,6 +125,36 @@ namespace StockHandler
             }
 
             return currentSignal;
+        }
+
+        public static void analyzeMaRSI(Collection<StockData> RSI)
+        {
+            if (RSI.Count < 1)
+            {
+                currentStateMaRSI = state.BELOW50;
+                return;
+            }
+            switch (currentStateMaRSI)
+            {
+                case state.ABOVE50:
+                    lowerRSI = 30 + (((RSI.Last().value - 75) / 25) * 5);
+                    if(RSI.Last().value < 50)
+                    {
+                        lowerRSI = 30;
+                        currentStateMaRSI = state.BELOW50;
+                    }
+
+                    break;
+                case state.BELOW50:
+                    higherRSI = 70 + (((RSI.Last().value - 25) / 25) * 5);
+                    if (RSI.Last().value > 50)
+                    {
+                        higherRSI = 70;
+                        currentStateMaRSI = state.ABOVE50;
+                    }
+                    break;
+
+            }
         }
 
     }
