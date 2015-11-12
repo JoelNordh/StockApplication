@@ -165,17 +165,19 @@ namespace StockApplication
                 }
                 else if (stockClass.priceList.Count == 20)
                 {
-                    plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE,20), Brushes.BlueViolet, "MA 20", plotter);
-                    plotData(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER), Brushes.Pink, "Upper Bolinger", plotter);
-                    plotData(stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), Brushes.Pink, "Lower Bolinger", plotter);
+                    //plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE,20), Brushes.BlueViolet, "MA 20", plotter);
+                    //plotData(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER), Brushes.Pink, "Upper Bolinger", plotter);
+                    //plotData(stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), Brushes.Pink, "Lower Bolinger", plotter);
                 }
                 else if (stockClass.priceList.Count == 50)
                 {
-                    plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 50), Brushes.Red, "MA 50", plotter);
+                    //plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 50), Brushes.Red, "MA 50", plotter);
                 }
                 else if (stockClass.priceList.Count == 100)
                 {
                     plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 100), Brushes.Green, "MA 100", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGEBAND, 99), Brushes.Pink, "MA 99", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGEBAND, 101), Brushes.Pink, "MA 101", plotter);
                 }
             }));
 

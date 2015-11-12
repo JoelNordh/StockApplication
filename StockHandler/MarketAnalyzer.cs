@@ -10,9 +10,47 @@ namespace StockHandler
     public class MarketAnalyzer
     {
         public enum signal { NOSIGNAL, BUYSIGNAL, SELLSIGNAL, STOPLOSS};
+        public enum MAState { INSIDE, UPPER, LOWER };
 
-        public static signal analyzeMA(Collection<StockData> movingAvrage20, Collection<StockData> movingAvrage50, Collection<StockData> movingAvrage100)
+        static MAState maState = MAState.INSIDE;
+
+        public static MAState analyzeMA(Collection<StockData> movingAvrageBandLower, Collection<StockData> movingAvrageBandUpper, StockData current)
         {
+            if(movingAvrageBandLower.Count == 0)
+            {
+                return MAState.INSIDE;
+            }
+
+            signal currentSignal = signal.NOSIGNAL;
+            switch(maState)
+            {
+                case MAState.INSIDE:
+                    if(current.value < movingAvrageBandLower.Last().value)
+                    {
+                        currentSignal = signal.SELLSIGNAL;
+                        maState = MAState.LOWER;
+                    }
+                    else if(current.value > movingAvrageBandUpper.Last().value)
+                    {
+                        currentSignal = signal.BUYSIGNAL;
+                        maState = MAState.UPPER;
+                    }
+                    break;
+                case MAState.UPPER:
+                    if(current.value < movingAvrageBandUpper.Last().value)
+                    {
+                        maState = MAState.INSIDE;
+                        currentSignal = signal.SELLSIGNAL;
+                    }
+                    break;
+                case MAState.LOWER:
+                    if(current.value > movingAvrageBandLower.Last().value)
+                    {
+                        maState = MAState.INSIDE;
+                    }
+                    break;
+            }
+
             //if (movingAvrage100.Count >= 2)
             //{
             //    if(movingAvrage20.Last().value > movingAvrage50.Last().value && movingAvrage50.Last().value > movingAvrage100.Last().value)
@@ -24,7 +62,7 @@ namespace StockHandler
             //        return signal.MOVINGAVRAGEDOWN;
             //    }
             //}
-            return signal.NOSIGNAL;
+            return maState;
         }
 
         static double highest;
@@ -59,7 +97,7 @@ namespace StockHandler
         private static state currentState = new state();
 
         const int lowerRSI = 27;
-        const int higherRSI = 73;
+        const int higherRSI = 80;
 
         public static signal analyzeRSI(Collection<StockData> RSI)
         {

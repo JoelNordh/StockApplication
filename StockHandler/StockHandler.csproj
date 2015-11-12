@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="CalculateBolingerBand.cs" />
     <Compile Include="CalculateMovingAverage.cs" />
+    <Compile Include="CalculateMovingAverageBands.cs" />
     <Compile Include="CalculateRSI.cs" />
     <Compile Include="ICalculator.cs" />
     <Compile Include="IdentifierConstants.cs" />
