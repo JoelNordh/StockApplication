@@ -180,8 +180,8 @@ namespace StockApplication
                 else if (stockClass.priceList.Count == 20)
                 {
                     plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE,20), Brushes.BlueViolet, "MA 20", plotter);
-                    //plotData(stockClass.UpperBolinger, Brushes.Pink, "Upper Bolinger", plotter);
-                    //plotData(stockClass.LowerBolinger, Brushes.Pink, "Lower Bolinger", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER), Brushes.Pink, "Upper Bolinger", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), Brushes.Pink, "Lower Bolinger", plotter);
                 }
                 else if (stockClass.priceList.Count == 50)
                 {

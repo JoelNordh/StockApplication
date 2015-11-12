@@ -11,5 +11,7 @@ namespace StockHandler
         public static readonly string MOVING_AVERAGE = "movingAverage";
         public static readonly string RSI = "rsi";
         public static readonly string PRICE_LIST = "priceList";
+        public static readonly string UPPERBOLINGER = "upperBolinger";
+        public static readonly string LOWERBOLINGER = "lowerBolinger";
     }
 }

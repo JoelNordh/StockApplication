@@ -50,29 +50,18 @@ namespace StockHandler
             stockDataStorage.Add(IdentifierConstants.MOVING_AVERAGE, 100, new ObservableCollection<StockData>());
             stockDataStorage.Add(IdentifierConstants.RSI, new ObservableCollection<StockData>());
             stockDataStorage.Add(IdentifierConstants.PRICE_LIST, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.UPPERBOLINGER, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.LOWERBOLINGER, new ObservableCollection<StockData>());
 
             Calculators = new List<ICalculator>();
 
             Array.ForEach(new int[] { 20, 50, 100 }, x => Calculators.Add(new CalculateMovingAverage(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, x), priceList, x)));
             Calculators.Add(new CalculateRSI(stockDataStorage.Get(IdentifierConstants.RSI), priceList, 14));
+            Calculators.Add(new CalculateBolingerBand(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER),
+                stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), priceList, stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 20)));
 
             this.trader = trader;
         }
-
-        //private void CalculateBolinger()
-        //{
-        //    double deviationSquare = 0;
-        //    for (int i = priceList.Count - 20; i < priceList.Count; i++)
-        //    {
-        //        deviationSquare += Math.Pow(movingAvrage20.Last().value - priceList[i].closingPrice, 2);
-        //    }
-
-        //    deviationSquare = Math.Sqrt(deviationSquare / 20);
-
-        //    UpperBolinger.Add(new StockData(movingAvrage20.Last().value + (deviationSquare * 2), movingAvrage20.Last().date));
-        //    LowerBolinger.Add(new StockData(movingAvrage20.Last().value - (deviationSquare * 2), movingAvrage20.Last().date));
-        //}
-
 
         public void addTestData(DataClass data) 
         {

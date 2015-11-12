@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalculateBolingerBand.cs" />
     <Compile Include="CalculateMovingAverage.cs" />
     <Compile Include="CalculateRSI.cs" />
     <Compile Include="ICalculator.cs" />
