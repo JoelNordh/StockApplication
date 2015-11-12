@@ -11,10 +11,10 @@ namespace StockHandler
     class CalculateRSI : ICalculator
     {
         private Collection<StockData> RSI;
-        private Collection<DataClass> priceList;
+        private Collection<StockData> priceList;
         private int RSIHistory;
 
-        public CalculateRSI(Collection<StockData> RSI, Collection<DataClass> priceList, int RSIHistory)
+        public CalculateRSI(Collection<StockData> RSI, Collection<StockData> priceList, int RSIHistory)
         {
             this.RSI = RSI;
             this.priceList = priceList;
@@ -33,7 +33,7 @@ namespace StockHandler
 
             for (int i = priceList.Count - RSIHistory + 1; i < priceList.Count; i++)
             {
-                var difference = priceList[i].closingPrice - priceList[i - 1].closingPrice;
+                var difference = priceList[i].value - priceList[i - 1].value;
                 if (difference >= 0)
                 {
                     sumGain += difference;

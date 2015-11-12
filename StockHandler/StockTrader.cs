@@ -50,9 +50,19 @@ namespace StockHandler
 
             possesion.Add(buyDetails);
 
-            balance = balance * 1;
+            balance = balance * 0.99;
 
             OnStockBought(new TradeEventArgs(balance, buyDetails));
+        }
+
+        public StockData getLastBuy()
+        {
+            if (possesion.Count > 0)
+            {
+                return new StockData(possesion.Last().closingPrice, possesion.Last().date);
+            }
+
+            return null;
         }
 
         public void sellStock(int amount, DataClass sellDetails)

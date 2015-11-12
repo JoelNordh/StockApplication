@@ -30,13 +30,14 @@ namespace StockApplication
     /// </summary>
     public partial class MainWindow : Window
     {     
-        StockHandler.TestClass testClass = new TestClass(new CsvStockParser());
-        StockHandler.StockTrader stockTrader = new StockTrader();
+        TestClass testClass = new TestClass(new CsvStockParser());
+        StockTrader stockTrader = new StockTrader();
         StockHandler.StockHandler stockClass;
         StockDataStorage stockDataStorage;
+        DataTestTimer testTimer; 
 
         PropertyClass propertyChanger = new PropertyClass();
-        Collection<StockData> buyPoints = new ObservableCollection<StockData>();
+        Collection<StockData> buyPoints = new ObservableCollection<StockData>(); //Eventuellt läggas till i StockDataStorage
         Collection<StockData> sellPoints = new ObservableCollection<StockData>();
 
         #region plotTools
@@ -105,7 +106,9 @@ namespace StockApplication
             InitializeComponent();
             stockDataStorage = new StockDataStorage();
             stockClass = new StockHandler.StockHandler(stockTrader, stockDataStorage);
-            //testClass.StockDataAdded += GotNewStockData;
+
+            testTimer = new DataTestTimer(5, testClass);
+            testClass.StockDataAdded += GotNewStockData;
 
             stockTrader.StockSold += plotSoldStock;
             stockTrader.StockBought += plotBoughtStock;
@@ -117,19 +120,7 @@ namespace StockApplication
             plotData(stockDataStorage.Get(IdentifierConstants.PRICE_LIST), Brushes.Black, "Current Price", plotter);
             plotSellEvent(sellPoints);
             plotBuyEvent(buyPoints);
-
-            //plotData(stockClass.movingAvrage50, Brushes.Red, "MA 50");
-            //plotData(stockClass.movingAvrage100, Brushes.Green, "MA 100");
-            //plotData(stockClass.UpperBolinger, Brushes.Pink, "Upper Boliger");
-            //plotData(stockClass.LowerBolinger, Brushes.Pink, "Upper Boliger");
-        }
-
-        private void Viewport_PropertyChanged(object sender, ExtendedPropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == "Visible")
-            {
-                RSIPlotter.Viewport.Visible = new DataRect(plotter.Viewport.Visible.X, RSIPlotter.Viewport.Visible.Y, plotter.Viewport.Visible.Width, RSIPlotter.Viewport.Visible.Height);
-            }
+            
         }
 
         private void plotBoughtStock(object sender, TradeEventArgs args)
@@ -151,18 +142,13 @@ namespace StockApplication
                 if (testRunning == false)
                 {
                     testRunning = true;
-                    new Task(() =>
-                    {
-                        testClass.StockDataAdded += GotNewStockData;
-                        while (testClass.HasMoreData())
-                        {
-
-                            testClass.nextData();
-                        }
-                    }).Start();
+                    testTimer.StartTimer();
                 }
-                //Fire new event with new data
-                //testClass.nextData();
+                else
+                {
+                    testRunning = false;
+                    testTimer.StopTimer();
+                }
             }
         }
 
@@ -224,6 +210,15 @@ namespace StockApplication
                 toPlot.Add(plotClass);
             }
             return toPlot;
+        }
+
+
+        private void Viewport_PropertyChanged(object sender, ExtendedPropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "Visible")
+            {
+                RSIPlotter.Viewport.Visible = new DataRect(plotter.Viewport.Visible.X, RSIPlotter.Viewport.Visible.Y, plotter.Viewport.Visible.Width, RSIPlotter.Viewport.Visible.Height);
+            }
         }
     }
 

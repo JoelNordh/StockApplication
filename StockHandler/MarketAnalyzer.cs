@@ -9,27 +9,57 @@ namespace StockHandler
 {
     public class MarketAnalyzer
     {
-        public enum signal { NOSIGNAL, BUYSIGNAL, SELLSIGNAL };
+        public enum signal { NOSIGNAL, BUYSIGNAL, SELLSIGNAL, STOPLOSS};
 
-        public static signal analyzeMA(Collection<StockData> movingAvrageShort, Collection<StockData> movingAvrageLong)
+        public static signal analyzeMA(Collection<StockData> movingAvrage20, Collection<StockData> movingAvrage50, Collection<StockData> movingAvrage100)
         {
-            //if (movingAvrageLong.Count >= 2)
+            //if (movingAvrage100.Count >= 2)
             //{
-            //    if (movingAvrageShort[movingAvrageShort.Count - 2].value < movingAvrageLong[movingAvrageLong.Count - 2].value && movingAvrageShort.Last().value >= movingAvrageLong.Last().value)
+            //    if(movingAvrage20.Last().value > movingAvrage50.Last().value && movingAvrage50.Last().value > movingAvrage100.Last().value)
             //    {
-            //        return signal.BUYSIGNAL;
+            //        return signal.MOVINGAVRAGEUP;
             //    }
-            //    else if (movingAvrageShort[movingAvrageShort.Count - 2].value > movingAvrageLong[movingAvrageLong.Count - 2].value && movingAvrageShort.Last().value <= movingAvrageLong.Last().value)
+            //    else if (movingAvrage20.Last().value < movingAvrage50.Last().value && movingAvrage50.Last().value < movingAvrage100.Last().value)
             //    {
-            //        return signal.SELLSIGNAL;
+            //        return signal.MOVINGAVRAGEDOWN;
             //    }
             //}
             return signal.NOSIGNAL;
         }
 
+        static double highest;
+        public static signal StopLoss(double current) //Gör om gör rätt
+        {
+            
+            if(highest == 0)
+            {
+                highest = current;
+                return signal.NOSIGNAL;
+            }
+
+            if(current > highest)
+            {
+                highest = current;
+                return signal.NOSIGNAL;
+            }
+
+            if(current < highest*0.93)
+            {
+                return signal.STOPLOSS;
+            }
+            return signal.NOSIGNAL;
+        }
+
+        public static void ClearStopLoss()
+        {
+            highest = 0;
+        }
 
         private enum state { BELOW30, ABOVE70, ABOVE50, BELOW50}
         private static state currentState = new state();
+
+        const int lowerRSI = 27;
+        const int higherRSI = 73;
 
         public static signal analyzeRSI(Collection<StockData> RSI)
         {
@@ -43,14 +73,17 @@ namespace StockHandler
             {
 
                 case state.BELOW30:
-                    if(RSI.Last().value > 30)
+                    if(RSI.Last().value > lowerRSI)
+                    {
+                        currentState = state.BELOW50;
+                    }
+                    if (RSI.Last().value > RSI[RSI.Count - 2].value)
                     {
                         currentSignal = signal.BUYSIGNAL;
-                        currentState = state.BELOW50;
                     }
                     break;
                 case state.BELOW50:
-                    if(RSI.Last().value < 30)
+                    if(RSI.Last().value < lowerRSI)
                     {
                         currentState = state.BELOW30;
                     }
@@ -60,9 +93,8 @@ namespace StockHandler
                     }
                     break;
                 case state.ABOVE50:
-                    if (RSI.Last().value > 70)
+                    if (RSI.Last().value > higherRSI)
                     {
-                        currentSignal = signal.SELLSIGNAL;
                         currentState = state.ABOVE70;
                     }
                     else if(RSI.Last().value < 50)
@@ -71,10 +103,19 @@ namespace StockHandler
                     }
                     break;
                 case state.ABOVE70:
-                    if(RSI.Last().value < 70)
+                    if(RSI.Last().value < higherRSI)
                     {
+                        currentSignal = signal.SELLSIGNAL;
                         currentState = state.ABOVE50;
                     }
+                    else
+                    {
+                        if(RSI.Last().value < RSI[RSI.Count-2].value)
+                        {
+                            currentSignal = signal.SELLSIGNAL;
+                        }
+                    }
+
                     break;
                 default:
                     currentState = state.ABOVE50;

@@ -45,9 +45,7 @@ namespace StockHandler
 
         public void nextData()
         {
-            Thread.Sleep(1);
             OnStockDataAdded(new NewDataEventArgs(testList[i++]));
-
         }
 
         public bool HasMoreData()

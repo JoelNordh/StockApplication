@@ -56,7 +56,7 @@ namespace StockHandler
             Calculators = new List<ICalculator>();
 
             Array.ForEach(new int[] { 20, 50, 100 }, x => Calculators.Add(new CalculateMovingAverage(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, x), priceList, x)));
-            Calculators.Add(new CalculateRSI(stockDataStorage.Get(IdentifierConstants.RSI), priceList, 14));
+            Calculators.Add(new CalculateRSI(stockDataStorage.Get(IdentifierConstants.RSI), stockDataStorage.Get(IdentifierConstants.PRICE_LIST), 14));
             Calculators.Add(new CalculateBolingerBand(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER),
                 stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), priceList, stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 20)));
 
@@ -71,28 +71,15 @@ namespace StockHandler
 
             Calculators.ForEach(c => c.Calculate());
 
-            //if (movingAvrage20.Count > 0)
-            //{
-            //    CalculateBolinger();
-            //}
-
-            MarketAnalyzer.signal signal = MarketAnalyzer.analyzeMA(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 20), stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 50));
-            if (signal == MarketAnalyzer.signal.BUYSIGNAL)
-            {
-                trader.buyStock(1, data);
-            }
-            else if(signal == MarketAnalyzer.signal.SELLSIGNAL)
+            MarketAnalyzer.signal signal = MarketAnalyzer.analyzeRSI(stockDataStorage.Get(IdentifierConstants.RSI));
+            if (signal == MarketAnalyzer.signal.SELLSIGNAL || MarketAnalyzer.StopLoss(data.closingPrice) == MarketAnalyzer.signal.STOPLOSS)
             {
                 trader.sellStock(1, data);
+                MarketAnalyzer.ClearStopLoss();
             }
-            signal = MarketAnalyzer.analyzeRSI(stockDataStorage.Get(IdentifierConstants.RSI));
-            if (signal == MarketAnalyzer.signal.BUYSIGNAL)
+            else if (signal == MarketAnalyzer.signal.BUYSIGNAL)
             {
                 trader.buyStock(1, data);
-            }
-            else if (signal == MarketAnalyzer.signal.SELLSIGNAL)
-            {
-                trader.sellStock(1, data);
             }
         }
     }
