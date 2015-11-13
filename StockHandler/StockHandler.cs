@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DataConverter;
 using StockHandler;
+using System.Diagnostics;
 
 namespace StockHandler
 {
@@ -45,20 +46,39 @@ namespace StockHandler
 
             this.stockDataStorage = stockDataStorage;
 
-            stockDataStorage.Add(IdentifierConstants.MOVING_AVERAGE, 20, new ObservableCollection<StockData>());
-            stockDataStorage.Add(IdentifierConstants.MOVING_AVERAGE, 50, new ObservableCollection<StockData>());
-            stockDataStorage.Add(IdentifierConstants.MOVING_AVERAGE, 100, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 20, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 50, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 100, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.EXPONENTIAL_MOVING_AVERAGE, 20, new ObservableCollection<StockData>());
             stockDataStorage.Add(IdentifierConstants.RSI, new ObservableCollection<StockData>());
             stockDataStorage.Add(IdentifierConstants.PRICE_LIST, new ObservableCollection<StockData>());
             stockDataStorage.Add(IdentifierConstants.UPPERBOLINGER, new ObservableCollection<StockData>());
             stockDataStorage.Add(IdentifierConstants.LOWERBOLINGER, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.ATR, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.UPPERKELTNER, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.LOWERKELTNER, new ObservableCollection<StockData>());
 
             Calculators = new List<ICalculator>();
 
-            Array.ForEach(new int[] { 20, 50, 100 }, x => Calculators.Add(new CalculateMovingAverage(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, x), priceList, x)));
+            Array.ForEach(new int[] { 20, 50, 100 }, x => Calculators.Add(new CalculateMovingAverage(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, x), priceList, x)));
+
+            Array.ForEach(new int[] { 20 }, x => Calculators.Add(new CalculateExponentialMovingAvrage(
+                stockDataStorage.Get(IdentifierConstants.EXPONENTIAL_MOVING_AVERAGE, x), 
+                stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, x), 
+                priceList, 
+                x)));
+
+            Calculators.Add(new CalculateATR(stockDataStorage.Get(IdentifierConstants.ATR), priceList, 10));
+
             Calculators.Add(new CalculateRSI(stockDataStorage.Get(IdentifierConstants.RSI), stockDataStorage.Get(IdentifierConstants.PRICE_LIST), 14));
+
             Calculators.Add(new CalculateBolingerBand(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER),
-                stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), priceList, stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 20)));
+                stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), priceList, stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 20)));
+
+            Calculators.Add(new CalculateKeltnerBand(stockDataStorage.Get(IdentifierConstants.LOWERKELTNER), 
+                stockDataStorage.Get(IdentifierConstants.UPPERKELTNER),
+                stockDataStorage.Get(IdentifierConstants.ATR), 
+                stockDataStorage.Get(IdentifierConstants.EXPONENTIAL_MOVING_AVERAGE, 20)));
 
             this.trader = trader;
         }
@@ -72,7 +92,7 @@ namespace StockHandler
             Calculators.ForEach(c => c.Calculate());
 
             MarketAnalyzer.signal signal = MarketAnalyzer.analyzeRSI(stockDataStorage.Get(IdentifierConstants.RSI));
-            if (signal == MarketAnalyzer.signal.SELLSIGNAL || MarketAnalyzer.StopLoss(data.closingPrice) == MarketAnalyzer.signal.STOPLOSS)
+            if (signal == MarketAnalyzer.signal.SELLSIGNAL)
             {
                 trader.sellStock(1, data);
                 MarketAnalyzer.ClearStopLoss();

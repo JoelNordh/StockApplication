@@ -37,7 +37,7 @@ namespace StockApplication
         DataTestTimer testTimer; 
 
         PropertyClass propertyChanger = new PropertyClass();
-        Collection<StockData> buyPoints = new ObservableCollection<StockData>(); //Eventuellt läggas till i StockDataStorage
+        Collection<StockData> buyPoints = new ObservableCollection<StockData>(); //TODO::Eventuellt läggas till i StockDataStorage
         Collection<StockData> sellPoints = new ObservableCollection<StockData>();
 
         #region plotTools
@@ -65,6 +65,7 @@ namespace StockApplication
 
         private void plotSellEvent(Collection<StockData> list)
         {
+
             IPointDataSource point = null;
             CirclePointMarker marker = new CirclePointMarker();
 
@@ -81,6 +82,7 @@ namespace StockApplication
             marker.Pen = new Pen(new SolidColorBrush(Colors.Black), 2.0);
             SellMarkerGraph.Marker = marker;     
         }
+
         private void plotBuyEvent(Collection<StockData> list)
         {
             IPointDataSource point = null;
@@ -99,6 +101,28 @@ namespace StockApplication
             marker.Pen = new Pen(new SolidColorBrush(Colors.Black), 2.0);
             BuyMarkerGraph.Marker = marker;
         }
+
+        //private void plotSqueeze(Collection<StockData>list, Brush pen)
+        //{
+        //    IPointDataSource point = null;
+        //    LineGraph line;
+
+
+        //    EnumerableDataSource<StockData> _edsSPP;
+        //    _edsSPP = new EnumerableDataSource<StockData>(list);
+
+
+        //    _edsSPP.SetXMapping(p => dateAxis.ConvertToDouble(p.date));
+        //    _edsSPP.SetYMapping(p => p.value);
+        //    point = _edsSPP;
+
+        //    line = new LineGraph(point);
+        //    line.LinePen = new Pen(pen, 2);
+
+        //    graph.Children.Add(line);
+        //    graph.FitToView();
+        //}
+
         #endregion
 
         public MainWindow()
@@ -158,24 +182,27 @@ namespace StockApplication
             {
                 stockClass.addTestData(args.Data);
 
-
-                if(stockClass.priceList.Count == 14)
+                if (stockClass.priceList.Count == 14)
                 {
                     plotData(stockDataStorage.Get(IdentifierConstants.RSI), Brushes.BurlyWood, "RSI", RSIPlotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.ATR), Brushes.DarkSlateGray, "ATR", RSIPlotter);
                 }
                 else if (stockClass.priceList.Count == 20)
                 {
-                    plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE,20), Brushes.BlueViolet, "MA 20", plotter);
-                    plotData(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER), Brushes.Pink, "Upper Bolinger", plotter);
-                    plotData(stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), Brushes.Pink, "Lower Bolinger", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.UPPERKELTNER), Brushes.Purple, "Upper Keltner", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.LOWERKELTNER), Brushes.Purple, "Lower Keltner", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.EXPONENTIAL_MOVING_AVERAGE, 20), Brushes.Purple, "Upper Keltner", plotter);
+                    //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 20), Brushes.BlueViolet, "MA 20", plotter);
+                    //plotData(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER), Brushes.Pink, "Upper Bolinger", plotter);
+                    //plotData(stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), Brushes.Pink, "Lower Bolinger", plotter);
                 }
                 else if (stockClass.priceList.Count == 50)
                 {
-                    plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 50), Brushes.Red, "MA 50", plotter);
+                    //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 50), Brushes.Red, "MA 50", plotter);
                 }
                 else if (stockClass.priceList.Count == 100)
                 {
-                    plotData(stockDataStorage.Get(IdentifierConstants.MOVING_AVERAGE, 100), Brushes.Green, "MA 100", plotter);
+                    //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 100), Brushes.Green, "MA 100", plotter);
                 }
             }));
 

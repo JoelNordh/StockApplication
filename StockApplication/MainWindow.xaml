@@ -14,6 +14,7 @@
             <RowDefinition Height="500"/>
             <RowDefinition Height="150"/>
             <RowDefinition Height="150"/>
+            <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
         <d3:ChartPlotter Name="plotter" Grid.Row="1">
             <d3:ChartPlotter.Resources>
@@ -28,7 +29,7 @@
             <d3:MarkerPointsGraph Name="SellMarkerGraph" Grid.Row="1"/>
             <d3:MarkerPointsGraph Name="BuyMarkerGraph" Grid.Row="1"/>
         </d3:ChartPlotter>
-        <d3:ChartPlotter Name="RSIPlotter" Grid.Row="2">
+        <d3:ChartPlotter Name="RSIPlotter" Grid.Row="2" Focusable="False">
             <d3:ChartPlotter.Resources>
             <local:Date2AxisConverter x:Key="Date2AxisConverter"/>
             </d3:ChartPlotter.Resources>
@@ -38,7 +39,16 @@
             <d3:HorizontalLine Value="70"/>
             <d3:HorizontalLine Value="30"/>
         </d3:ChartPlotter>
+        <d3:ChartPlotter Name="SqueezePlot" Grid.Row="3" Focusable="False">
+            <d3:ChartPlotter.Resources>
+                <local:Date2AxisConverter x:Key="Date2AxisConverter"/>
+            </d3:ChartPlotter.Resources>
+            <d3:HorizontalDateTimeAxis Name="dateAxis3"/>
+            <d3:Header Content="{Binding PlotHeader}"/>
+            <d3:VerticalAxisTitle Content="Value"/>
+            
+        </d3:ChartPlotter>
         <Label Content="Push space to advance data"/>
-        <Label Content="{Binding Path=CurrentBalance, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" VerticalAlignment="Top" />
+        <Label Content="{Binding Path=CurrentBalance, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" VerticalAlignment="Top" />
     </Grid>
 </Window>
