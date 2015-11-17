@@ -57,6 +57,9 @@ namespace StockHandler
             stockDataStorage.Add(IdentifierConstants.ATR, new ObservableCollection<StockData>());
             stockDataStorage.Add(IdentifierConstants.UPPERKELTNER, new ObservableCollection<StockData>());
             stockDataStorage.Add(IdentifierConstants.LOWERKELTNER, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.SQUEEZEPOINTS, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.NOSQUEEZEPOINTS, new ObservableCollection<StockData>());
+            stockDataStorage.Add(IdentifierConstants.SQUEEZE, new ObservableCollection<StockData>());
 
             Calculators = new List<ICalculator>();
 
@@ -79,6 +82,18 @@ namespace StockHandler
                 stockDataStorage.Get(IdentifierConstants.UPPERKELTNER),
                 stockDataStorage.Get(IdentifierConstants.ATR), 
                 stockDataStorage.Get(IdentifierConstants.EXPONENTIAL_MOVING_AVERAGE, 20)));
+
+            Calculators.Add(new CalculateSqueeze(stockDataStorage.Get(IdentifierConstants.SQUEEZE),
+                stockDataStorage.Get(IdentifierConstants.SQUEEZEPOINTS),
+                stockDataStorage.Get(IdentifierConstants.NOSQUEEZEPOINTS),
+                stockDataStorage.Get(IdentifierConstants.LOWERKELTNER),
+                stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER),
+                stockDataStorage.Get(IdentifierConstants.UPPERKELTNER),
+                stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER),
+                stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 20),
+                stockDataStorage.Get(IdentifierConstants.EXPONENTIAL_MOVING_AVERAGE, 20),
+                priceList, 20
+                ));
 
             this.trader = trader;
         }

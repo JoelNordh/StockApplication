@@ -46,6 +46,8 @@
             <d3:HorizontalDateTimeAxis Name="dateAxis3"/>
             <d3:Header Content="{Binding PlotHeader}"/>
             <d3:VerticalAxisTitle Content="Value"/>
+            <d3:MarkerPointsGraph Name="squeezePoints" Grid.Row="3"/>
+            <d3:MarkerPointsGraph Name="noSqueezePoints" Grid.Row="3"/>
             
         </d3:ChartPlotter>
         <Label Content="Push space to advance data"/>

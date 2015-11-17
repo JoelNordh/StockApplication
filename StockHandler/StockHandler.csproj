@@ -47,6 +47,7 @@
     <Compile Include="CalculateKeltnerBand.cs" />
     <Compile Include="CalculateMovingAverage.cs" />
     <Compile Include="CalculateRSI.cs" />
+    <Compile Include="CalculateSqueeze.cs" />
     <Compile Include="ICalculator.cs" />
     <Compile Include="IdentifierConstants.cs" />
     <Compile Include="MarketAnalyzer.cs" />

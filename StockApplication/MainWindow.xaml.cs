@@ -102,26 +102,43 @@ namespace StockApplication
             BuyMarkerGraph.Marker = marker;
         }
 
-        //private void plotSqueeze(Collection<StockData>list, Brush pen)
-        //{
-        //    IPointDataSource point = null;
-        //    LineGraph line;
+        private void plotSqueeze(Collection<StockData> list)
+        {
+            IPointDataSource point = null;
+            CirclePointMarker marker = new CirclePointMarker();
 
+            EnumerableDataSource<StockData> _edsSPP;
+            _edsSPP = new EnumerableDataSource<StockData>(list);
+            _edsSPP.SetXMapping(p => dateAxis.ConvertToDouble(p.date));
+            _edsSPP.SetYMapping(p => p.value);
+            point = _edsSPP;
 
-        //    EnumerableDataSource<StockData> _edsSPP;
-        //    _edsSPP = new EnumerableDataSource<StockData>(list);
+            squeezePoints.DataSource = point;
 
+            marker.Size = 5;
+            marker.Fill = new SolidColorBrush(Colors.Red);
+            marker.Pen = new Pen(new SolidColorBrush(Colors.Black), 2.0);
+            squeezePoints.Marker = marker;
+        }
 
-        //    _edsSPP.SetXMapping(p => dateAxis.ConvertToDouble(p.date));
-        //    _edsSPP.SetYMapping(p => p.value);
-        //    point = _edsSPP;
+        private void plotNoSqueeze(Collection<StockData> list)
+        {
+            IPointDataSource point = null;
+            CirclePointMarker marker = new CirclePointMarker();
 
-        //    line = new LineGraph(point);
-        //    line.LinePen = new Pen(pen, 2);
+            EnumerableDataSource<StockData> _edsSPP;
+            _edsSPP = new EnumerableDataSource<StockData>(list);
+            _edsSPP.SetXMapping(p => dateAxis.ConvertToDouble(p.date));
+            _edsSPP.SetYMapping(p => p.value);
+            point = _edsSPP;
 
-        //    graph.Children.Add(line);
-        //    graph.FitToView();
-        //}
+            noSqueezePoints.DataSource = point;
+
+            marker.Size = 5;
+            marker.Fill = new SolidColorBrush(Colors.Gray);
+            marker.Pen = new Pen(new SolidColorBrush(Colors.Black), 2.0);
+            noSqueezePoints.Marker = marker;
+        }
 
         #endregion
 
@@ -192,6 +209,10 @@ namespace StockApplication
                     plotData(stockDataStorage.Get(IdentifierConstants.UPPERKELTNER), Brushes.Purple, "Upper Keltner", plotter);
                     plotData(stockDataStorage.Get(IdentifierConstants.LOWERKELTNER), Brushes.Purple, "Lower Keltner", plotter);
                     plotData(stockDataStorage.Get(IdentifierConstants.EXPONENTIAL_MOVING_AVERAGE, 20), Brushes.Purple, "Upper Keltner", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.SQUEEZE), Brushes.Gold, "Squeeze curve", SqueezePlot);
+
+                    plotSqueeze(stockDataStorage.Get(IdentifierConstants.SQUEEZEPOINTS));
+                    //plotNoSqueeze(stockDataStorage.Get(IdentifierConstants.NOSQUEEZEPOINTS));
                     //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 20), Brushes.BlueViolet, "MA 20", plotter);
                     //plotData(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER), Brushes.Pink, "Upper Bolinger", plotter);
                     //plotData(stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), Brushes.Pink, "Lower Bolinger", plotter);
@@ -245,6 +266,7 @@ namespace StockApplication
             if (e.PropertyName == "Visible")
             {
                 RSIPlotter.Viewport.Visible = new DataRect(plotter.Viewport.Visible.X, RSIPlotter.Viewport.Visible.Y, plotter.Viewport.Visible.Width, RSIPlotter.Viewport.Visible.Height);
+                SqueezePlot.Viewport.Visible = new DataRect(plotter.Viewport.Visible.X, SqueezePlot.Viewport.Visible.Y, plotter.Viewport.Visible.Width, SqueezePlot.Viewport.Visible.Height);
             }
         }
     }

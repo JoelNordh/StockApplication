@@ -17,5 +17,8 @@ namespace StockHandler
         public static readonly string UPPERKELTNER = "upperKeltner";
         public static readonly string LOWERKELTNER = "lowerKeltner";
         public static readonly string ATR = "atr";
+        public static readonly string SQUEEZE = "squeeze";
+        public static readonly string NOSQUEEZEPOINTS = "nosqueeze";
+        public static readonly string SQUEEZEPOINTS = "squeezePoints";
     }
 }

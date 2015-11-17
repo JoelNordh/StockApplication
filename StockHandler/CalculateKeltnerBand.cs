@@ -25,8 +25,8 @@ namespace StockHandler
             {
                 return;
             }
-            upperKeltner.Add(new StockData(EMA.Last().value + (2 * ATR.Last().value), ATR.Last().date));
-            lowerKeltner.Add(new StockData(EMA.Last().value - (2 * ATR.Last().value), ATR.Last().date));
+            upperKeltner.Add(new StockData(EMA.Last().value + (1.5 * ATR.Last().value), ATR.Last().date));
+            lowerKeltner.Add(new StockData(EMA.Last().value - (1.5 * ATR.Last().value), ATR.Last().date));
         }
     }
 }
