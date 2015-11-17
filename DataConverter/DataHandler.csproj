@@ -7,8 +7,8 @@
     <ProjectGuid>{12A7541F-491D-496F-A44C-3AE12B5EE880}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DataConverter</RootNamespace>
-    <AssemblyName>DataConverter</AssemblyName>
+    <RootNamespace>DataHandler</RootNamespace>
+    <AssemblyName>DataHandler</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -55,6 +55,8 @@
   <ItemGroup>
     <Compile Include="CsvStockParser.cs" />
     <Compile Include="DataClass.cs" />
+    <Compile Include="OMX30.cs" />
+    <Compile Include="SQLClient.cs" />
     <Compile Include="StockParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

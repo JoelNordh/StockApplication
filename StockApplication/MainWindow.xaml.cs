@@ -17,7 +17,7 @@ using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.PointMarkers;
 using System.Collections.ObjectModel;
 using StockHandler;
-using DataConverter;
+using DataHandler;
 using System.Threading;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -39,6 +39,9 @@ namespace StockApplication
         PropertyClass propertyChanger = new PropertyClass();
         Collection<StockData> buyPoints = new ObservableCollection<StockData>(); //TODO::Eventuellt läggas till i StockDataStorage
         Collection<StockData> sellPoints = new ObservableCollection<StockData>();
+
+        //TEST
+        SQLClient sqlClient;
 
         #region plotTools
         private void plotData(Collection<StockData> list, Brush pen, String Description, ChartPlotter graph)
@@ -161,7 +164,9 @@ namespace StockApplication
             plotData(stockDataStorage.Get(IdentifierConstants.PRICE_LIST), Brushes.Black, "Current Price", plotter);
             plotSellEvent(sellPoints);
             plotBuyEvent(buyPoints);
-            
+
+
+            sqlClient = new SQLClient("finance", "financePass", "axelnordh.ddns.net", "finance");
         }
 
         private void plotBoughtStock(object sender, TradeEventArgs args)

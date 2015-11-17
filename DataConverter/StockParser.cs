@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataConverter
+namespace DataHandler
 {
     public interface StockParser
     {

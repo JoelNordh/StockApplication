@@ -63,12 +63,10 @@ C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\StockA
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\StockApplication.exe.config
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\StockApplication.exe
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\StockApplication.pdb
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\DataConverter.dll
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\DynamicDataDisplay.dll
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\System.Windows.Controls.Input.Toolkit.dll
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\System.Windows.Controls.Layout.Toolkit.dll
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\WPFToolkit.dll
-C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\DataConverter.pdb
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\MainWindow.baml
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\StockApplication.g.resources
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\obj\Debug\StockApplication.Properties.Resources.resources
@@ -104,3 +102,5 @@ C:\Users\joeln\Source\Repos\StockApplication\StockApplication\obj\Debug\StockApp
 C:\Users\joeln\Source\Repos\StockApplication\StockApplication\obj\Debug\StockApplication.csproj.GenerateResource.Cache
 C:\Users\joeln\Source\Repos\StockApplication\StockApplication\obj\Debug\StockApplication.exe
 C:\Users\joeln\Source\Repos\StockApplication\StockApplication\obj\Debug\StockApplication.pdb
+C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\DataHandler.dll
+C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\DataHandler.pdb

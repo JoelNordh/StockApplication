@@ -5,11 +5,13 @@ VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockApplication", "StockApplication\StockApplication.csproj", "{43922AEB-A419-4476-8222-8EC2BA491642}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataConverter", "DataConverter\DataConverter.csproj", "{12A7541F-491D-496F-A44C-3AE12B5EE880}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataHandler", "DataConverter\DataHandler.csproj", "{12A7541F-491D-496F-A44C-3AE12B5EE880}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject1\TestProject1.csproj", "{607FABFC-7C24-49E2-922A-80A1FC401F90}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockHandler", "StockHandler\StockHandler.csproj", "{67C94D3B-2C98-4795-A31D-89379E1D84A5}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "finance", "finance\finance.sqlproj", "{E64FCA9A-462A-455D-90B6-B8D4FF526597}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,12 @@ Global
 		{67C94D3B-2C98-4795-A31D-89379E1D84A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{67C94D3B-2C98-4795-A31D-89379E1D84A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{67C94D3B-2C98-4795-A31D-89379E1D84A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E64FCA9A-462A-455D-90B6-B8D4FF526597}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E64FCA9A-462A-455D-90B6-B8D4FF526597}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E64FCA9A-462A-455D-90B6-B8D4FF526597}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{E64FCA9A-462A-455D-90B6-B8D4FF526597}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E64FCA9A-462A-455D-90B6-B8D4FF526597}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E64FCA9A-462A-455D-90B6-B8D4FF526597}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
