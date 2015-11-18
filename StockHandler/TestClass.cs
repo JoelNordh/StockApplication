@@ -27,6 +27,8 @@ namespace StockHandler
         public ObservableCollection<DataClass> testList;
         int i;
         public NewDataDelegate StockDataAdded;
+        //TEST
+        SQLClient sqlClient;
 
         protected virtual void OnStockDataAdded(NewDataEventArgs args)
         {
@@ -38,6 +40,10 @@ namespace StockHandler
 
         public TestClass(StockParser parser)
         {
+            sqlClient = new SQLClient("finance", "financePass", "localhost", "finance");
+            sqlClient.GetDataFrom(testList, new DateTime(0));
+
+
             testList = parser.Parse(new System.IO.StreamReader("history.csv"));
             testList = new ObservableCollection<DataClass>(testList.Reverse()); 
             i = 0;

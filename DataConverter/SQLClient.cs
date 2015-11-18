@@ -5,18 +5,20 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MySql.Data;
+using MySql.Data.MySqlClient;
 
 namespace DataHandler
 {
     public class SQLClient
     {
-        SqlConnection myConnection;
+        MySqlConnection myConnection;
         public SQLClient(string username, string password, string server, string database)
         {
-            myConnection = new SqlConnection();
+            myConnection = new MySqlConnection();
             
 
-            myConnection.ConnectionString = string.Format("UID={0},3306;PWD={1};Address={2};Database={3}", username, password, server, database);
+            myConnection.ConnectionString = string.Format("Address={2};UID={0};PWD={1};Database={3}", username, password, server, database);
 
             try
             {
@@ -34,14 +36,21 @@ namespace DataHandler
 
         private void getStockId(OMX30IdDate obj)
         {
-            SqlCommand command = new SqlCommand(string.Format("SELECT [id] FROM Stock where symbol = {0}", obj.symbol));
-            SqlDataReader myReader = command.ExecuteReader();
+            Console.WriteLine(string.Format("SELECT id FROM Stock where symbol = \"{0}\"", obj.symbol));
+            MySqlCommand command = new MySqlCommand(string.Format("SELECT id FROM Stock where symbol = \"{0}\"", obj.symbol), myConnection);
 
+            MySqlDataReader myReader;
+            myReader = command.ExecuteReader();
+            myReader.Read();
             int result;
 
-            int.TryParse((string)myReader["id"], out result);
+            Console.WriteLine(myReader["id"].ToString());
+
+            int.TryParse(myReader["id"].ToString(), out result);
 
             obj.SetStockID(result);
+
+            myReader.Close();
 
         }
 
@@ -52,8 +61,8 @@ namespace DataHandler
 
         public void GetDataFrom(Collection<DataClass> data, DateTime from)
         {
-            SqlCommand myCommand = new SqlCommand(string.Format("SELECT * FROM Quote where date > {0}", from.ToString()), myConnection);
-            SqlDataReader myReader = myCommand.ExecuteReader();
+            MySqlCommand myCommand = new MySqlCommand(string.Format("SELECT * FROM Quote where date > \"{0}\"", from.ToString()), myConnection);
+            MySqlDataReader myReader = myCommand.ExecuteReader();
 
             while(myReader.Read())
             {

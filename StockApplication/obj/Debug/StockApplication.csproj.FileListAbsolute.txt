@@ -104,3 +104,4 @@ C:\Users\joeln\Source\Repos\StockApplication\StockApplication\obj\Debug\StockApp
 C:\Users\joeln\Source\Repos\StockApplication\StockApplication\obj\Debug\StockApplication.pdb
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\DataHandler.dll
 C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\DataHandler.pdb
+C:\Users\jn2957\Documents\git\StockApplication\StockApplication\bin\Debug\MySql.Data.dll
