@@ -62,88 +62,63 @@ namespace DataHandler
             return new DateTime(((dt.Ticks + d.Ticks - 1) / d.Ticks) * d.Ticks);
         }
 
-        public void GetDataFrom(Collection<DataClass> data, DateTime from, string stock)
+        public void GetDataFrom(Collection<DataClass> data, DateTime from, int stock, int timePeriod)
         {
-            List<DataClass> temporaryList = new List<DataClass>();
-            foreach (OMX30.OMX30IdDate item in omx30.Omx30)
+            MySqlCommand myCommand = new MySqlCommand(string.Format("SELECT * FROM Quote where date > \"{0}\" AND Stock = \"{1}\" ORDER BY date", from.ToString(), stock), myConnection);
+            MySqlDataReader myReader = myCommand.ExecuteReader();
+            DateTime fifteenMinutes = new DateTime();
+            double currentLow = double.MaxValue;
+            double currentHigh = double.MinValue;
+
+            while (myReader.Read())
             {
-                MySqlCommand myCommand = new MySqlCommand(string.Format("SELECT * FROM Quote where date > \"{0}\" AND Stock = \"{1}\" ORDER BY date", from.ToString(), item.StockID), myConnection);
-                MySqlDataReader myReader = myCommand.ExecuteReader();
-                DateTime fifteenMinutes = new DateTime();
-                double currentLow = double.MaxValue;
-                double currentHigh = double.MinValue;
-
-                while (myReader.Read())
+                if(fifteenMinutes == new DateTime())
                 {
-                    if(fifteenMinutes == new DateTime())
-                    {
-                        fifteenMinutes = DateTime.Parse(myReader["date"].ToString());
-                        fifteenMinutes = fifteenMinutes.AddMinutes(15);
+                    fifteenMinutes = DateTime.Parse(myReader["date"].ToString());
+                    fifteenMinutes = fifteenMinutes.AddMinutes(timePeriod);
 
-                        DataClass dataClass = new DataClass();
+                    DataClass dataClass = new DataClass();
 
-                        dataClass.closingPrice = double.Parse(myReader["price"].ToString()) * (item.weight / 100);
-                        dataClass.highPrice = double.Parse(myReader["price"].ToString()) * (item.weight / 100);
-                        dataClass.lowPrice = double.Parse(myReader["price"].ToString()) * (item.weight / 100);
+                    dataClass.closingPrice = double.Parse(myReader["price"].ToString());
+                    dataClass.highPrice = double.Parse(myReader["price"].ToString());
+                    dataClass.lowPrice = double.Parse(myReader["price"].ToString());
 
-                        dataClass.date = RoundUp(DateTime.Parse(myReader["date"].ToString()), TimeSpan.FromMinutes(15));
+                    dataClass.date = RoundUp(DateTime.Parse(myReader["date"].ToString()), TimeSpan.FromMinutes(timePeriod));
 
-                        temporaryList.Add(dataClass);
+                    data.Add(dataClass);
 
-                        continue;
-                    }
-
-                    if(double.Parse(myReader["price"].ToString()) < currentLow)
-                    {
-                        currentLow = double.Parse(myReader["price"].ToString());
-                    }
-                    if(double.Parse(myReader["price"].ToString()) > currentHigh)
-                    {
-                        currentHigh = double.Parse(myReader["price"].ToString());
-                    }
-
-                    if(DateTime.Parse(myReader["date"].ToString()) >= fifteenMinutes)
-                    {
-                        fifteenMinutes = RoundUp(DateTime.Parse(myReader["date"].ToString()).AddMinutes(15), TimeSpan.FromMinutes(15)); 
-
-                        DataClass dataClass = new DataClass();
-
-                        dataClass.closingPrice = double.Parse(myReader["price"].ToString()) * (item.weight / 100);
-                        dataClass.highPrice = currentHigh * (item.weight / 100);
-                        dataClass.lowPrice = currentLow * (item.weight / 100);
-                        dataClass.date = RoundUp(DateTime.Parse(myReader["date"].ToString()), TimeSpan.FromMinutes(15));
-
-                        temporaryList.Add(dataClass);
-
-                        currentHigh = double.MinValue;
-                        currentLow = double.MaxValue;
-
-                        continue;
-                    }
+                    continue;
                 }
-                myReader.Close();
+
+                if(double.Parse(myReader["price"].ToString()) < currentLow)
+                {
+                    currentLow = double.Parse(myReader["price"].ToString());
+                }
+                if(double.Parse(myReader["price"].ToString()) > currentHigh)
+                {
+                    currentHigh = double.Parse(myReader["price"].ToString());
+                }
+
+                if(DateTime.Parse(myReader["date"].ToString()) >= fifteenMinutes)
+                {
+                    fifteenMinutes = RoundUp(DateTime.Parse(myReader["date"].ToString()).AddMinutes(timePeriod), TimeSpan.FromMinutes(timePeriod)); 
+
+                    DataClass dataClass = new DataClass();
+
+                    dataClass.closingPrice = double.Parse(myReader["price"].ToString());
+                    dataClass.highPrice = currentHigh;
+                    dataClass.lowPrice = currentLow;
+                    dataClass.date = RoundUp(DateTime.Parse(myReader["date"].ToString()), TimeSpan.FromMinutes(timePeriod));
+
+                    data.Add(dataClass);
+
+                    currentHigh = double.MinValue;
+                    currentLow = double.MaxValue;
+
+                    continue;
+                }
             }
-
-            temporaryList = temporaryList.OrderBy(x => x.date).ToList();
-            DataClass previousItem = temporaryList[0];
-            DataClass addItem = new DataClass();
-            foreach (DataClass item in temporaryList)
-            {
-                if(item.date == previousItem.date)
-                {
-                    addItem.highPrice += item.highPrice;
-                    addItem.lowPrice += item.lowPrice;
-                    addItem.closingPrice += item.closingPrice;
-                    addItem.date = item.date;
-                }
-                else
-                {
-                    data.Add(addItem);
-
-                    addItem = new DataClass();
-                }
-                previousItem = item;
-            }
+            myReader.Close();
 
         }
     }

@@ -47,10 +47,10 @@ namespace DataHandler
         public class OMX30IdDate
         {
             public string Name { get; set; }
-            public string symbol;
+            public string symbol { get; set; }
             string type;
             public double weight;
-            public int StockID;
+            public int StockID { get; set; }
 
             public OMX30IdDate(string Name, string symbol, double weight)
             {

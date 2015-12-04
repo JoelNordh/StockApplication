@@ -50,7 +50,7 @@
             <d3:MarkerPointsGraph Name="squeezePoints" Grid.Row="3"/>
             <d3:MarkerPointsGraph Name="noSqueezePoints" Grid.Row="3"/>
         </d3:ChartPlotter>
-        <ComboBox x:Name="StockBox" ItemsSource="{Binding Path=AvailableStock}" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200" Grid.Row="0" SelectionChanged="ComboBox_SelectionChanged"></ComboBox>
+        <ComboBox x:Name="StockBox" ItemsSource="{Binding Path=AvailableStock}" DisplayMemberPath="Name" SelectedValuePath="StockID" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200" Grid.Row="0" SelectionChanged="ComboBox_SelectionChanged"></ComboBox>
         <Label Content="{Binding Path=CurrentBalance, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" VerticalAlignment="Top" />
     </Grid>
 </Window>

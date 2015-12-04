@@ -178,17 +178,20 @@ namespace StockApplication
         bool testRunning; 
         private void Grid_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Space)
+            if (StockBox.SelectedValue != null)
             {
-                if (testRunning == false)
+                if (e.Key == Key.Space)
                 {
-                    testRunning = true;
-                    testTimer.StartTimer();
-                }
-                else
-                {
-                    testRunning = false;
-                    testTimer.StopTimer();
+                    if (testRunning == false)
+                    {
+                        testRunning = true;
+                        testTimer.StartTimer();
+                    }
+                    else
+                    {
+                        testRunning = false;
+                        testTimer.StopTimer();
+                    }
                 }
             }
         }
@@ -228,9 +231,7 @@ namespace StockApplication
             }));
 
         }
-
-
-
+        
         public static ObservableCollection<StockData> toStockClass(ObservableCollection<DataClass> data, DataClass.priceChooser choice)
         {
             ObservableCollection<StockData> toPlot = new ObservableCollection<StockData>();
@@ -272,9 +273,14 @@ namespace StockApplication
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            OMX30.OMX30IdDate test = (OMX30.OMX30IdDate)StockBox.SelectedItem;
+            int test = (int)StockBox.SelectedValue;
 
-            string stop = "";
+            stockDataStorage.ResetAll();
+            stockClass.priceList.Clear();
+
+            testClass.setNewStock(test);
+
+
         }
     }
 
