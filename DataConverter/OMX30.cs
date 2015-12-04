@@ -9,6 +9,7 @@ namespace DataHandler
     public class OMX30
     {
         public List<OMX30IdDate> Omx30;
+        
         public OMX30()
         {
             Omx30 = new List<OMX30IdDate>();
@@ -43,31 +44,30 @@ namespace DataHandler
             Omx30.Add(new OMX30IdDate("Telia Sonera", "TLSN", 5.54));
             Omx30.Add(new OMX30IdDate("Volvo Group", "VOLV-B", 4.56));
         }
-    }
-
-    public class OMX30IdDate
-    {
-        string name;
-        public string symbol;
-        string type;
-        double weight;
-        int StockID;
-
-        public OMX30IdDate(string name, string symbol, double weight)
+        public class OMX30IdDate
         {
-            this.name = name;
-            this.symbol = symbol;
-            this.weight = weight; 
-        }
+            public string Name { get; set; }
+            public string symbol;
+            string type;
+            public double weight;
+            public int StockID;
 
-        public void SetStockID(int ID)
-        {
-            StockID = ID;
-        }
+            public OMX30IdDate(string Name, string symbol, double weight)
+            {
+                this.Name = Name;
+                this.symbol = symbol;
+                this.weight = weight;
+            }
 
-        public void SetType(string type)
-        {
-            this.type = type; 
+            public void SetStockID(int ID)
+            {
+                StockID = ID;
+            }
+
+            public void SetType(string type)
+            {
+                this.type = type;
+            }
         }
     }
 }

@@ -6,11 +6,12 @@
         xmlns:local="clr-namespace:StockApplication"
         xmlns:d3="http://research.microsoft.com/DynamicDataDisplay/1.0"
         xmlns:stockData="clr-namespace:StockHandler;assembly=StockHandler"
+        xmlns:DataHandler="clr-namespace:DataHandler;assembly=DataHandler"
         mc:Ignorable="d"
         Title="MainWindow" Height="1000" Width="1000">
     <Grid KeyUp="Grid_KeyUp">
         <Grid.RowDefinitions>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="500"/>
             <RowDefinition Height="150"/>
             <RowDefinition Height="150"/>
@@ -48,9 +49,8 @@
             <d3:VerticalAxisTitle Content="Value"/>
             <d3:MarkerPointsGraph Name="squeezePoints" Grid.Row="3"/>
             <d3:MarkerPointsGraph Name="noSqueezePoints" Grid.Row="3"/>
-            
         </d3:ChartPlotter>
-        <Label Content="Push space to advance data"/>
+        <ComboBox x:Name="StockBox" ItemsSource="{Binding Path=AvailableStock}" DisplayMemberPath="Name" HorizontalAlignment="Left" VerticalAlignment="Center" Width="200" Grid.Row="0" SelectionChanged="ComboBox_SelectionChanged"></ComboBox>
         <Label Content="{Binding Path=CurrentBalance, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" VerticalAlignment="Top" />
     </Grid>
 </Window>

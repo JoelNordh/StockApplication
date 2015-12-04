@@ -40,6 +40,7 @@ namespace StockApplication
         Collection<StockData> buyPoints = new ObservableCollection<StockData>(); //TODO::Eventuellt läggas till i StockDataStorage
         Collection<StockData> sellPoints = new ObservableCollection<StockData>();
 
+
         #region plotTools
         private void plotData(Collection<StockData> list, Brush pen, String Description, ChartPlotter graph)
         {
@@ -268,11 +269,27 @@ namespace StockApplication
                 SqueezePlot.Viewport.Visible = new DataRect(plotter.Viewport.Visible.X, SqueezePlot.Viewport.Visible.Y, plotter.Viewport.Visible.Width, SqueezePlot.Viewport.Visible.Height);
             }
         }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            OMX30.OMX30IdDate test = (OMX30.OMX30IdDate)StockBox.SelectedItem;
+
+            string stop = "";
+        }
     }
 
     public class PropertyClass : INotifyPropertyChanged
     {
         private string balance;
+        private SQLClient availableStock = new SQLClient("finance", "financePass", "localhost", "finance");
+
+        public List<OMX30.OMX30IdDate> AvailableStock
+        {
+            get
+            { return availableStock.omx30.Omx30; }
+
+        }
+
         public string CurrentBalance
         {
             get

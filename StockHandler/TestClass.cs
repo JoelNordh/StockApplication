@@ -40,11 +40,10 @@ namespace StockHandler
 
         public TestClass(StockParser parser)
         {
-            sqlClient = new SQLClient("finance", "financePass", "localhost", "finance");
-            sqlClient.GetDataFrom(testList, new DateTime(0));
+            testList = new ObservableCollection<DataClass>();
+            sqlClient = new SQLClient("finance", "financePass", "localhost", "finance"); //axelnordh.ddns.net
+            sqlClient.GetDataFrom(testList, new DateTime(2015, 11, 10));
 
-
-            testList = parser.Parse(new System.IO.StreamReader("history.csv"));
             testList = new ObservableCollection<DataClass>(testList.Reverse()); 
             i = 0;
         }
