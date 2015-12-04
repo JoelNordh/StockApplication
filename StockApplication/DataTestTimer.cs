@@ -38,6 +38,11 @@ namespace StockApplication
             {
                 testClass.nextData();
             }
+            else
+            {
+                StopTimer();
+
+            }
         }
     }
 }

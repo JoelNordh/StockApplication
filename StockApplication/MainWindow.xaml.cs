@@ -148,7 +148,7 @@ namespace StockApplication
             stockDataStorage = new StockDataStorage();
             stockClass = new StockHandler.StockHandler(stockTrader, stockDataStorage);
 
-            testTimer = new DataTestTimer(5, testClass);
+            testTimer = new DataTestTimer(2, testClass);
             testClass.StockDataAdded += GotNewStockData;
 
             stockTrader.StockSold += plotSoldStock;
@@ -197,35 +197,65 @@ namespace StockApplication
         {
             this.Dispatcher.Invoke((Action)(() =>
             {
-                stockClass.addTestData(args.Data);
-
-                if (stockClass.priceList.Count == 14)
-                {
+            if (!testClass.HasMoreData())
+            {
+                
                     plotData(stockDataStorage.Get(IdentifierConstants.RSI), Brushes.BurlyWood, "RSI", RSIPlotter);
                     plotData(stockDataStorage.Get(IdentifierConstants.ATR), Brushes.DarkSlateGray, "ATR", RSIPlotter);
-                }
-                else if (stockClass.priceList.Count == 20)
-                {
+
                     plotData(stockDataStorage.Get(IdentifierConstants.UPPERKELTNER), Brushes.Purple, "Upper Keltner", plotter);
                     plotData(stockDataStorage.Get(IdentifierConstants.LOWERKELTNER), Brushes.Purple, "Lower Keltner", plotter);
                     plotData(stockDataStorage.Get(IdentifierConstants.EXPONENTIAL_MOVING_AVERAGE, 20), Brushes.Purple, "Upper Keltner", plotter);
                     plotData(stockDataStorage.Get(IdentifierConstants.SQUEEZE), Brushes.Gold, "Squeeze curve", SqueezePlot);
 
                     plotSqueeze(stockDataStorage.Get(IdentifierConstants.SQUEEZEPOINTS));
-                    //plotNoSqueeze(stockDataStorage.Get(IdentifierConstants.NOSQUEEZEPOINTS));
-                    //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 20), Brushes.BlueViolet, "MA 20", plotter);
-                    //plotData(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER), Brushes.Pink, "Upper Bolinger", plotter);
-                    //plotData(stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), Brushes.Pink, "Lower Bolinger", plotter);
-                }
-                else if (stockClass.priceList.Count == 50)
-                {
-                    //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 50), Brushes.Red, "MA 50", plotter);
-                }
-                else if (stockClass.priceList.Count == 100)
-                {
-                    //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 100), Brushes.Green, "MA 100", plotter);
-                }
+                
+                //plotNoSqueeze(stockDataStorage.Get(IdentifierConstants.NOSQUEEZEPOINTS));
+                //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 20), Brushes.BlueViolet, "MA 20", plotter);
+                //plotData(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER), Brushes.Pink, "Upper Bolinger", plotter);
+                //plotData(stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), Brushes.Pink, "Lower Bolinger", plotter);
+
+                //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 50), Brushes.Red, "MA 50", plotter);
+
+                //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 100), Brushes.Green, "MA 100", plotter);
+
+            }
+            else
+            {
+                stockClass.addTestData(args.Data);
+            }
             }));
+            //this.Dispatcher.Invoke((Action)(() =>
+            //{
+            //    stockClass.addTestData(args.Data);
+
+            //    if (stockClass.priceList.Count == 14)
+            //    {
+            //        plotData(stockDataStorage.Get(IdentifierConstants.RSI), Brushes.BurlyWood, "RSI", RSIPlotter);
+            //        plotData(stockDataStorage.Get(IdentifierConstants.ATR), Brushes.DarkSlateGray, "ATR", RSIPlotter);
+            //    }
+            //    else if (stockClass.priceList.Count == 20)
+            //    {
+            //        plotData(stockDataStorage.Get(IdentifierConstants.UPPERKELTNER), Brushes.Purple, "Upper Keltner", plotter);
+            //        plotData(stockDataStorage.Get(IdentifierConstants.LOWERKELTNER), Brushes.Purple, "Lower Keltner", plotter);
+            //        plotData(stockDataStorage.Get(IdentifierConstants.EXPONENTIAL_MOVING_AVERAGE, 20), Brushes.Purple, "Upper Keltner", plotter);
+            //        plotData(stockDataStorage.Get(IdentifierConstants.SQUEEZE), Brushes.Gold, "Squeeze curve", SqueezePlot);
+
+            //        plotSqueeze(stockDataStorage.Get(IdentifierConstants.SQUEEZEPOINTS));
+            //        //plotNoSqueeze(stockDataStorage.Get(IdentifierConstants.NOSQUEEZEPOINTS));
+            //        //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 20), Brushes.BlueViolet, "MA 20", plotter);
+            //        //plotData(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER), Brushes.Pink, "Upper Bolinger", plotter);
+            //        //plotData(stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), Brushes.Pink, "Lower Bolinger", plotter);
+            //    }
+            //    else if (stockClass.priceList.Count == 50)
+            //    {
+            //        //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 50), Brushes.Red, "MA 50", plotter);
+            //    }
+            //    else if (stockClass.priceList.Count == 100)
+            //    {
+            //        //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 100), Brushes.Green, "MA 100", plotter);
+            //    }
+            //}));
 
         }
 
