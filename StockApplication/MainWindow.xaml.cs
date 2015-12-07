@@ -39,10 +39,14 @@ namespace StockApplication
         PropertyClass propertyChanger = new PropertyClass();
         Collection<StockData> buyPoints = new ObservableCollection<StockData>(); //TODO::Eventuellt läggas till i StockDataStorage
         Collection<StockData> sellPoints = new ObservableCollection<StockData>();
-
-        #region plotTools
+#region plotTools
         private void plotData(Collection<StockData> list, Brush pen, String Description, ChartPlotter graph)
         {
+            if(propertyChanger.Graphs.Any(x => x.Description.Full.Equals(Description)))
+            {
+                return;
+            }
+            
             IPointDataSource point = null;
             LineGraph line;
             
@@ -58,6 +62,10 @@ namespace StockApplication
             line = new LineGraph(point);
             line.LinePen = new Pen(pen, 2);
             line.Description = new PenDescription(Description);
+
+            line.Visibility = Visibility.Hidden;
+
+            propertyChanger.Graphs.Add(line);
 
             graph.Children.Add(line);
             graph.FitToView();
@@ -148,7 +156,7 @@ namespace StockApplication
             stockDataStorage = new StockDataStorage();
             stockClass = new StockHandler.StockHandler(stockTrader, stockDataStorage);
 
-            testTimer = new DataTestTimer(2, testClass);
+            testTimer = new DataTestTimer(1, testClass);
             testClass.StockDataAdded += GotNewStockData;
 
             stockTrader.StockSold += plotSoldStock;
@@ -161,7 +169,7 @@ namespace StockApplication
             plotData(stockDataStorage.Get(IdentifierConstants.PRICE_LIST), Brushes.Black, "Current Price", plotter);
             plotSellEvent(sellPoints);
             plotBuyEvent(buyPoints);
-            
+
         }
 
         private void plotBoughtStock(object sender, TradeEventArgs args)
@@ -197,9 +205,11 @@ namespace StockApplication
         {
             this.Dispatcher.Invoke((Action)(() =>
             {
-            if (!testClass.HasMoreData())
-            {
-                
+                if (!testClass.HasMoreData())
+                {
+                    //plotData(stockDataStorage.Get(IdentifierConstants.PRICE_LIST), Brushes.Black, "Current Price", plotter);
+                    //plotSellEvent(sellPoints);
+                    //plotBuyEvent(buyPoints);
                     plotData(stockDataStorage.Get(IdentifierConstants.RSI), Brushes.BurlyWood, "RSI", RSIPlotter);
                     plotData(stockDataStorage.Get(IdentifierConstants.ATR), Brushes.DarkSlateGray, "ATR", RSIPlotter);
 
@@ -208,54 +218,23 @@ namespace StockApplication
                     plotData(stockDataStorage.Get(IdentifierConstants.EXPONENTIAL_MOVING_AVERAGE, 20), Brushes.Purple, "Upper Keltner", plotter);
                     plotData(stockDataStorage.Get(IdentifierConstants.SQUEEZE), Brushes.Gold, "Squeeze curve", SqueezePlot);
 
-                    plotSqueeze(stockDataStorage.Get(IdentifierConstants.SQUEEZEPOINTS));
-                
-                //plotNoSqueeze(stockDataStorage.Get(IdentifierConstants.NOSQUEEZEPOINTS));
-                //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 20), Brushes.BlueViolet, "MA 20", plotter);
-                //plotData(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER), Brushes.Pink, "Upper Bolinger", plotter);
-                //plotData(stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), Brushes.Pink, "Lower Bolinger", plotter);
+                    //plotSqueeze(stockDataStorage.Get(IdentifierConstants.SQUEEZEPOINTS));
 
-                //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 50), Brushes.Red, "MA 50", plotter);
+                    //plotNoSqueeze(stockDataStorage.Get(IdentifierConstants.NOSQUEEZEPOINTS));
+                    plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 20), Brushes.BlueViolet, "MA 20", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER), Brushes.Pink, "Upper Bolinger", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), Brushes.Pink, "Lower Bolinger", plotter);
 
-                //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 100), Brushes.Green, "MA 100", plotter);
+                    plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 50), Brushes.Red, "MA 50", plotter);
 
-            }
-            else
-            {
-                stockClass.addTestData(args.Data);
-            }
+                    plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 100), Brushes.Green, "MA 100", plotter);
+                }
+                else
+                {
+                    stockClass.addTestData(args.Data);
+                }
             }));
-            //this.Dispatcher.Invoke((Action)(() =>
-            //{
-            //    stockClass.addTestData(args.Data);
 
-            //    if (stockClass.priceList.Count == 14)
-            //    {
-            //        plotData(stockDataStorage.Get(IdentifierConstants.RSI), Brushes.BurlyWood, "RSI", RSIPlotter);
-            //        plotData(stockDataStorage.Get(IdentifierConstants.ATR), Brushes.DarkSlateGray, "ATR", RSIPlotter);
-            //    }
-            //    else if (stockClass.priceList.Count == 20)
-            //    {
-            //        plotData(stockDataStorage.Get(IdentifierConstants.UPPERKELTNER), Brushes.Purple, "Upper Keltner", plotter);
-            //        plotData(stockDataStorage.Get(IdentifierConstants.LOWERKELTNER), Brushes.Purple, "Lower Keltner", plotter);
-            //        plotData(stockDataStorage.Get(IdentifierConstants.EXPONENTIAL_MOVING_AVERAGE, 20), Brushes.Purple, "Upper Keltner", plotter);
-            //        plotData(stockDataStorage.Get(IdentifierConstants.SQUEEZE), Brushes.Gold, "Squeeze curve", SqueezePlot);
-
-            //        plotSqueeze(stockDataStorage.Get(IdentifierConstants.SQUEEZEPOINTS));
-            //        //plotNoSqueeze(stockDataStorage.Get(IdentifierConstants.NOSQUEEZEPOINTS));
-            //        //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 20), Brushes.BlueViolet, "MA 20", plotter);
-            //        //plotData(stockDataStorage.Get(IdentifierConstants.UPPERBOLINGER), Brushes.Pink, "Upper Bolinger", plotter);
-            //        //plotData(stockDataStorage.Get(IdentifierConstants.LOWERBOLINGER), Brushes.Pink, "Lower Bolinger", plotter);
-            //    }
-            //    else if (stockClass.priceList.Count == 50)
-            //    {
-            //        //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 50), Brushes.Red, "MA 50", plotter);
-            //    }
-            //    else if (stockClass.priceList.Count == 100)
-            //    {
-            //        //plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 100), Brushes.Green, "MA 100", plotter);
-            //    }
-            //}));
 
         }
 
@@ -299,11 +278,31 @@ namespace StockApplication
                 SqueezePlot.Viewport.Visible = new DataRect(plotter.Viewport.Visible.X, SqueezePlot.Viewport.Visible.Y, plotter.Viewport.Visible.Width, SqueezePlot.Viewport.Visible.Height);
             }
         }
+
+        private void LineGraphs_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (((LineGraph)LineGraphs.SelectedItem).Visibility == Visibility.Hidden)
+            {
+                ((LineGraph)LineGraphs.SelectedItem).Visibility = Visibility.Visible;
+            }
+            else
+                ((LineGraph)LineGraphs.SelectedItem).Visibility = Visibility.Hidden;
+        }
     }
 
     public class PropertyClass : INotifyPropertyChanged
     {
         private string balance;
+        private ObservableCollection<LineGraph> graphs = new ObservableCollection<LineGraph>();
+
+        public ObservableCollection<LineGraph> Graphs
+        {
+            get
+            {
+                return graphs;
+            }
+        }
+
         public string CurrentBalance
         {
             get

@@ -60,6 +60,10 @@ namespace DataConverter
         }
         private static int parseInt(string sValue)
         {
+            if (sValue == "")
+            {
+                return 0;
+            }
             try
             {
                 return int.Parse(sValue);

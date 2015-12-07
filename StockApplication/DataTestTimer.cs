@@ -32,7 +32,7 @@ namespace StockApplication
             time.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
-        private void TimerTick(object state)
+        public void TimerTick(object state)
         {
             if (testClass.HasMoreData())
             {

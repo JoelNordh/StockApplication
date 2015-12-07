@@ -11,19 +11,15 @@ namespace StockHandler
     {
         public enum signal { NOSIGNAL, BUYSIGNAL, SELLSIGNAL, STOPLOSS};
 
-        public static signal analyzeMA(Collection<StockData> movingAvrage20, Collection<StockData> movingAvrage50, Collection<StockData> movingAvrage100)
+        public static signal analyzeMA(Collection<StockData> movingAvrage)
         {
-            //if (movingAvrage100.Count >= 2)
-            //{
-            //    if(movingAvrage20.Last().value > movingAvrage50.Last().value && movingAvrage50.Last().value > movingAvrage100.Last().value)
-            //    {
-            //        return signal.MOVINGAVRAGEUP;
-            //    }
-            //    else if (movingAvrage20.Last().value < movingAvrage50.Last().value && movingAvrage50.Last().value < movingAvrage100.Last().value)
-            //    {
-            //        return signal.MOVINGAVRAGEDOWN;
-            //    }
-            //}
+            if (movingAvrage.Count >= 2)
+            {
+                if(movingAvrage.Last().value <= movingAvrage[movingAvrage.Count - 2].value)
+                {
+                    return signal.STOPLOSS;
+                }
+            }
             return signal.NOSIGNAL;
         }
 
