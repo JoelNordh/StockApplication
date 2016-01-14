@@ -277,7 +277,8 @@ namespace StockApplication
 
             stockDataStorage.ResetAll();
             stockClass.priceList.Clear();
-
+            buyPoints.Clear();
+            sellPoints.Clear();
             testClass.setNewStock(test);
 
 
@@ -287,7 +288,7 @@ namespace StockApplication
     public class PropertyClass : INotifyPropertyChanged
     {
         private string balance;
-        private SQLClient availableStock = new SQLClient("finance", "financePass", "localhost", "finance");
+        private SQLClient availableStock = new SQLClient("finance", "financePass", "axelnordh.ddns.net", "finance");
 
         public List<OMX30.OMX30IdDate> AvailableStock
         {

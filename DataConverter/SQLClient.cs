@@ -110,6 +110,9 @@ namespace DataHandler
                     dataClass.lowPrice = currentLow;
                     dataClass.date = RoundUp(DateTime.Parse(myReader["date"].ToString()), TimeSpan.FromMinutes(timePeriod));
 
+                    if (data.Count >= 2)
+                        Console.WriteLine("Date period: " + (data[data.Count - 1].date - data[data.Count - 2].date).ToString());
+
                     data.Add(dataClass);
 
                     currentHigh = double.MinValue;

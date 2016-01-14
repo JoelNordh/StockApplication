@@ -41,7 +41,7 @@ namespace StockHandler
         public TestClass(StockParser parser)
         {
             testList = new ObservableCollection<DataClass>();
-            sqlClient = new SQLClient("finance", "financePass", "localhost", "finance"); //axelnordh.ddns.net
+            sqlClient = new SQLClient("finance", "financePass", "axelnordh.ddns.net", "finance"); //axelnordh.ddns.net
         }
 
         public void nextData()
@@ -60,9 +60,8 @@ namespace StockHandler
         public void setNewStock(int stockId)
         {
             testList.Clear();
-            sqlClient.GetDataFrom(testList, new DateTime(), stockId, 1);
-
-            //testList = new ObservableCollection<DataClass>(testList.Reverse());
+            sqlClient.GetDataFrom(testList, new DateTime(), stockId, 10);
+            Console.WriteLine("Date period: " + (testList[testList.Count-1].date - testList[testList.Count - 2].date).ToString());
             i = 0;
         }
     }
