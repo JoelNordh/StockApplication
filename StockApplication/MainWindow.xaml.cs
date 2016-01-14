@@ -17,7 +17,7 @@ using Microsoft.Research.DynamicDataDisplay;
 using Microsoft.Research.DynamicDataDisplay.PointMarkers;
 using System.Collections.ObjectModel;
 using StockHandler;
-using DataConverter;
+using DataHandler;
 using System.Threading;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
@@ -39,7 +39,9 @@ namespace StockApplication
         PropertyClass propertyChanger = new PropertyClass();
         Collection<StockData> buyPoints = new ObservableCollection<StockData>(); //TODO::Eventuellt läggas till i StockDataStorage
         Collection<StockData> sellPoints = new ObservableCollection<StockData>();
-#region plotTools
+
+
+        #region plotTools
         private void plotData(Collection<StockData> list, Brush pen, String Description, ChartPlotter graph)
         {
             if(propertyChanger.Graphs.Any(x => x.Description.Full.Equals(Description)))
@@ -169,7 +171,6 @@ namespace StockApplication
             plotData(stockDataStorage.Get(IdentifierConstants.PRICE_LIST), Brushes.Black, "Current Price", plotter);
             plotSellEvent(sellPoints);
             plotBuyEvent(buyPoints);
-
         }
 
         private void plotBoughtStock(object sender, TradeEventArgs args)
@@ -186,17 +187,20 @@ namespace StockApplication
         bool testRunning; 
         private void Grid_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Space)
+            if (StockBox.SelectedValue != null)
             {
-                if (testRunning == false)
+                if (e.Key == Key.Space)
                 {
-                    testRunning = true;
-                    testTimer.StartTimer();
-                }
-                else
-                {
-                    testRunning = false;
-                    testTimer.StopTimer();
+                    if (testRunning == false)
+                    {
+                        testRunning = true;
+                        testTimer.StartTimer();
+                    }
+                    else
+                    {
+                        testRunning = false;
+                        testTimer.StopTimer();
+                    }
                 }
             }
         }
@@ -237,9 +241,7 @@ namespace StockApplication
 
 
         }
-
-
-
+        
         public static ObservableCollection<StockData> toStockClass(ObservableCollection<DataClass> data, DataClass.priceChooser choice)
         {
             ObservableCollection<StockData> toPlot = new ObservableCollection<StockData>();
@@ -279,6 +281,18 @@ namespace StockApplication
             }
         }
 
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            int test = (int)StockBox.SelectedValue;
+
+            stockDataStorage.ResetAll();
+            stockClass.priceList.Clear();
+            buyPoints.Clear();
+            sellPoints.Clear();
+            testClass.setNewStock(test);
+
+
+        }
         private void LineGraphs_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (((LineGraph)LineGraphs.SelectedItem).Visibility == Visibility.Hidden)
@@ -293,6 +307,15 @@ namespace StockApplication
     public class PropertyClass : INotifyPropertyChanged
     {
         private string balance;
+        private SQLClient availableStock = new SQLClient("finance", "financePass", "axelnordh.ddns.net", "finance");
+
+        public List<OMX30.OMX30IdDate> AvailableStock
+        {
+            get
+            { return availableStock.omx30.Omx30; }
+
+        }
+
         private ObservableCollection<LineGraph> graphs = new ObservableCollection<LineGraph>();
 
         public ObservableCollection<LineGraph> Graphs

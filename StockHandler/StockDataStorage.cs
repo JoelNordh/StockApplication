@@ -52,5 +52,26 @@ namespace StockHandler
             return data[name].Values.ToList();
         }
 
+        public void Clear(string name)
+        {
+            Clear(name, 0);
+        }
+
+        public void Clear(string name, int value)
+        {
+            data[name][value].Clear();
+        }
+
+        public void ResetAll()
+        {
+            foreach(string key in data.Keys)
+            {
+                foreach(int numberKey in data[key].Keys)
+                {
+                    Clear(key, numberKey);
+                }
+            }
+        }
+
     }
 }

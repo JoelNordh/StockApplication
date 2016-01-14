@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
-using DataConverter;
+using DataHandler;
 using System.Collections.Generic;
 
 namespace TestProject1
@@ -14,7 +14,7 @@ namespace TestProject1
         {
             using (StreamReader stream = new StreamReader(@"historical.csv"))
             {
-                //List<DataConverter.DataClass> list = DataConverter.CsvStockParser(stream);
+                //List<DataHandler.DataClass> list = DataHandler.CsvStockParser(stream);
 
                 //Assert.IsNotNull(list);
             }

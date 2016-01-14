@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using DataConverter;
+using DataHandler;
 using System.Collections.ObjectModel;
 using System.Threading;
 
@@ -27,6 +27,8 @@ namespace StockHandler
         public ObservableCollection<DataClass> testList;
         int i;
         public NewDataDelegate StockDataAdded;
+        //TEST
+        SQLClient sqlClient;
 
         protected virtual void OnStockDataAdded(NewDataEventArgs args)
         {
@@ -38,9 +40,8 @@ namespace StockHandler
 
         public TestClass(StockParser parser)
         {
-            testList = parser.Parse(new System.IO.StreamReader("history.csv"));
-            testList = new ObservableCollection<DataClass>(testList.Reverse()); 
-            i = 0;
+            testList = new ObservableCollection<DataClass>();
+            sqlClient = new SQLClient("finance", "financePass", "axelnordh.ddns.net", "finance"); //axelnordh.ddns.net
         }
 
         public void nextData()
@@ -54,6 +55,14 @@ namespace StockHandler
                 return true;
             else
                 return false;
+        }
+
+        public void setNewStock(int stockId)
+        {
+            testList.Clear();
+            sqlClient.GetDataFrom(testList, new DateTime(), stockId, 10);
+            Console.WriteLine("Date period: " + (testList[testList.Count-1].date - testList[testList.Count - 2].date).ToString());
+            i = 0;
         }
     }
 }
