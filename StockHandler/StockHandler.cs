@@ -113,7 +113,7 @@ namespace StockHandler
                 trader.sellStock(1, data);
                 MarketAnalyzer.ClearStopLoss();
             }
-            else if (signal == MarketAnalyzer.signal.BUYSIGNAL && MarketAnalyzer.analyzeMA(Ma100) != MarketAnalyzer.signal.STOPLOSS)
+            else if (signal == MarketAnalyzer.signal.BUYSIGNAL/* && MarketAnalyzer.analyzeMA(Ma100) != MarketAnalyzer.signal.STOPLOSS*/)
             {
                 trader.buyStock(1, data);
             }

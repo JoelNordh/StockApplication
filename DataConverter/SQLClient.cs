@@ -72,7 +72,8 @@ namespace DataHandler
 
             while (myReader.Read())
             {
-                if(fifteenMinutes == new DateTime())
+                DateTime testTime = DateTime.Parse(myReader["date"].ToString());
+                if (fifteenMinutes == new DateTime())
                 {
                     fifteenMinutes = DateTime.Parse(myReader["date"].ToString());
                     fifteenMinutes = fifteenMinutes.AddMinutes(timePeriod);
@@ -101,7 +102,7 @@ namespace DataHandler
 
                 if(DateTime.Parse(myReader["date"].ToString()) >= fifteenMinutes)
                 {
-                    fifteenMinutes = RoundUp(DateTime.Parse(myReader["date"].ToString()).AddMinutes(timePeriod), TimeSpan.FromMinutes(timePeriod)); 
+                    fifteenMinutes = RoundUp(DateTime.Parse(myReader["date"].ToString()), TimeSpan.FromMinutes(timePeriod)); 
 
                     DataClass dataClass = new DataClass();
 
@@ -110,8 +111,8 @@ namespace DataHandler
                     dataClass.lowPrice = currentLow;
                     dataClass.date = RoundUp(DateTime.Parse(myReader["date"].ToString()), TimeSpan.FromMinutes(timePeriod));
 
-                    if (data.Count >= 2)
-                        Console.WriteLine("Date period: " + (data[data.Count - 1].date - data[data.Count - 2].date).ToString());
+                    //if (data.Count >= 2)
+                    //    Console.WriteLine("Date period: " + (data[data.Count - 1].date - data[data.Count - 2].date).ToString());
 
                     data.Add(dataClass);
 
