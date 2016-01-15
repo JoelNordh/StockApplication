@@ -107,16 +107,27 @@ namespace StockHandler
             Calculators.ForEach(c => c.Calculate());
 
             MarketAnalyzer.signal signal = MarketAnalyzer.analyzeRSI(stockDataStorage.Get(IdentifierConstants.RSI));
-            Collection<StockData> Ma100 = stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 100);
-            if (signal == MarketAnalyzer.signal.SELLSIGNAL)
-            {
-                trader.sellStock(1, data);
-                MarketAnalyzer.ClearStopLoss();
-            }
-            else if (signal == MarketAnalyzer.signal.BUYSIGNAL && MarketAnalyzer.analyzeMA(Ma100) != MarketAnalyzer.signal.STOPLOSS)
+            MarketAnalyzer.signal squeezeSignal = MarketAnalyzer.analyzeSqueeze(stockDataStorage.Get(IdentifierConstants.SQUEEZEPOINTS), stockDataStorage.Get(IdentifierConstants.SQUEEZE));
+
+            Collection <StockData> Ma100 = stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 100);
+            //if (signal == MarketAnalyzer.signal.SELLSIGNAL)
+            //{
+            //    trader.sellStock(1, data);
+            //    MarketAnalyzer.ClearStopLoss();
+            //}
+            //else if (signal == MarketAnalyzer.signal.BUYSIGNAL/* && MarketAnalyzer.analyzeMA(Ma100) != MarketAnalyzer.signal.STOPLOSS*/)
+            //{
+            //    trader.buyStock(1, data);
+            //}
+            if(squeezeSignal == MarketAnalyzer.signal.BUYSIGNAL)
             {
                 trader.buyStock(1, data);
             }
+            else if(squeezeSignal == MarketAnalyzer.signal.SELLSIGNAL)
+            {
+                trader.sellStock(1, data);
+            }
+
         }
     }
 }

@@ -29,13 +29,11 @@ namespace DataConverter
                     {
                         continue;
                     }
-                    data.highPrice = parseDouble(fields[1]);
-                    data.lowPrice = parseDouble(fields[2]);
-                    data.closingPrice = parseDouble(fields[3]);
-                    data.avragePrice = parseDouble(fields[4]);
+                    data.openPrice = parseDouble(fields[1]);
+                    data.highPrice = parseDouble(fields[2]);
+                    data.lowPrice = parseDouble(fields[3]);
+                    data.closingPrice = parseDouble(fields[4]);
                     data.volume = parseInt(fields[5]);
-                    data.turnover = parseDouble(fields[6]);
-                    data.trades = parseInt(fields[7]);
 
                     list.Add(data);
                 }

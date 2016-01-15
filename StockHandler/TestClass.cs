@@ -38,7 +38,7 @@ namespace StockHandler
 
         public TestClass(StockParser parser)
         {
-            testList = parser.Parse(new System.IO.StreamReader("history.csv"));
+            testList = parser.Parse(new System.IO.StreamReader("Nordea.csv"));
             testList = new ObservableCollection<DataClass>(testList.Reverse()); 
             i = 0;
         }

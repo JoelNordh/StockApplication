@@ -17,6 +17,7 @@ namespace DataConverter
         
         public double highPrice { get; set; }
         public double lowPrice { get; set; }
+        public double openPrice { get; set; }
         public double closingPrice { get; set; }
         public double avragePrice { get; set; }
         public int volume { get; set; }
@@ -29,6 +30,7 @@ namespace DataConverter
             this.highPrice = 0;
             this.lowPrice = 0;
             this.closingPrice = 0;
+            this.openPrice = openPrice;
             this.avragePrice = 0;
             this.volume = 0;
             this.turnover = 0;

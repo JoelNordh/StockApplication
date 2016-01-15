@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,6 +50,33 @@ namespace StockHandler
         public static void ClearStopLoss()
         {
             highest = 0;
+        }
+
+
+        static bool inSqueeze = false;
+        public static signal analyzeSqueeze(Collection<StockData> squeezePoint, Collection<StockData> squeezeCurve)
+        {
+            if(squeezePoint.Count < 1)
+                return signal.NOSIGNAL;
+
+            if (squeezeCurve.Last().date != squeezePoint.Last().date && inSqueeze)
+            {
+                Console.WriteLine("Leaving Squeeze. Date " + squeezeCurve.Last().date.ToString() + " Value: " + squeezeCurve.Last().value.ToString());
+                inSqueeze = false;
+
+                if(squeezeCurve.Last().value > 1)
+                {
+                    Console.WriteLine("Buying!");
+                    return signal.BUYSIGNAL;
+                }
+            }
+            if(squeezeCurve.Last().date == squeezePoint.Last().date && !inSqueeze)
+            {
+                inSqueeze = true;
+                return signal.SELLSIGNAL;
+            }
+
+            return signal.NOSIGNAL;
         }
 
         private enum state { BELOW30, ABOVE70, ABOVE50, BELOW50}

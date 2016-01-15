@@ -218,7 +218,7 @@ namespace StockApplication
                     plotData(stockDataStorage.Get(IdentifierConstants.EXPONENTIAL_MOVING_AVERAGE, 20), Brushes.Purple, "Upper Keltner", plotter);
                     plotData(stockDataStorage.Get(IdentifierConstants.SQUEEZE), Brushes.Gold, "Squeeze curve", SqueezePlot);
 
-                    //plotSqueeze(stockDataStorage.Get(IdentifierConstants.SQUEEZEPOINTS));
+                    plotSqueeze(stockDataStorage.Get(IdentifierConstants.SQUEEZEPOINTS));
 
                     //plotNoSqueeze(stockDataStorage.Get(IdentifierConstants.NOSQUEEZEPOINTS));
                     plotData(stockDataStorage.Get(IdentifierConstants.SIMPLE_MOVING_AVERAGE, 20), Brushes.BlueViolet, "MA 20", plotter);
